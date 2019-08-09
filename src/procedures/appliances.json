@@ -1,0 +1,21 @@
+[
+    {
+        "title": "Light",
+        "labelingSteps": [
+            {"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn", "timeoutOnFinish": 5},
+            {"text": "Get ready to turn off the light. Press the START button. When the circle turns blue, turn off the light.", "identifier": "lightOff"}
+        ]
+    },
+    {"title": "Washing machine", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
+    {"title": "Dishwasher", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
+    {"title": "Iron", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
+    {"title": "Water heater", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
+    {"title": "Grinder", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
+    {"title": "Microwave oven", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
+    {"title": "Oven", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
+    {"title": "Stove", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
+    {"title": "Hair dryer", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
+    {"title": "Air conditioning unit", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
+    {"title": "Vacuum cleaner", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
+    {"title": "Television", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]}
+]
