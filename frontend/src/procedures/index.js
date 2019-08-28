@@ -5,6 +5,7 @@
 
 import React from 'react';
 
+import ProcedureTestConnectivity from './ProcedureTestConnectivity';
 import ProcedureTestTest1 from './ProcedureTestTest1';
 import ProcedureTestPMC from './ProcedureTestPMC';
 import ProcedureLabeling from './ProcedureLabeling';
@@ -18,7 +19,7 @@ function loadProcedures() {
     };
 
     return [
-        {title: "Internet connectivity test", component: <ProcedureTestTest1 key="0" {...props} />},
+        {title: "Internet connectivity test", component: <ProcedureTestConnectivity {...props} />},
         {title: "RPi test", component: <ProcedureTestTest1 key="1" {...props} />},
         {title: "PMC test", component: <ProcedureTestPMC key="2" {...props} />},
         {title: "MicroHub test", component: <ProcedureTestTest1 key="3" {...props} />},

@@ -12,10 +12,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/test/connectivity', (req, res) => {
   checkInternetConnected({ domain: 'https://www.google.com' }) //https://videk.ijs.si
     .then((result) => {
-      res.send({ successful: true, message: result }); // Successfully connected to a server.
+      res.send({ successful: true, message: "" }); // Successfully connected to a server.
     })
     .catch((ex) => {
-      res.send({ successful: false, message: ex }); // Cannot connect to a server or error occurred.
+      res.send({ successful: false, message: `No connectivity (${ex.errno})`}); // Cannot connect to a server or error occurred.
     });
   
 });

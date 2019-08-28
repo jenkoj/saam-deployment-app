@@ -17,6 +17,7 @@ class BaseProcedureTest extends React.Component {
             testExecuting: false,
             testSuccessful: null,
             showSnackbar: false,
+            errorMessage: "",
         }  
     }
 
@@ -26,9 +27,17 @@ class BaseProcedureTest extends React.Component {
         });
     }
 
+    callApi = async () => {
+        const response = await fetch(this.props.testAPI);
+        const body = await response.json();
+        if (response.status !== 200) throw Error(body.message);
+        
+        return body;
+      };
+
     handleExecuteTest = () => {
         if(!this.state.testExecuting) {
-            const {setLockedConsistentState, testExecutionCode, handleProcedureFinish} = this.props;
+            const {setLockedConsistentState, handleProcedureFinish} = this.props;
 
             this.setState({
                 testExecuting: true,
@@ -37,33 +46,42 @@ class BaseProcedureTest extends React.Component {
             });
 
             setLockedConsistentState(true);
-            testExecutionCode();
-            
-            // Simulate API call.
-            setTimeout(() => {
-                if(Math.random() < 0.5) {
-                    this.setState({
-                        testExecuting: false,
-                        testSuccessful: true,
-                        showSnackbar: true,
-                    });
-                    handleProcedureFinish(true, 3000);
-                }
-                else {
+
+            // Test API call.
+            this.callApi()
+                .then(res => {
+                    if(res && res.successful) {
+                        this.setState({
+                            testExecuting: false,
+                            testSuccessful: true,
+                            showSnackbar: true,
+                        });
+                        handleProcedureFinish(true, 3000);
+                    }
+                    else {
+                        this.setState({
+                            testExecuting: false,
+                            testSuccessful: false,
+                            showSnackbar: true,
+                            errorMessage: res && res.message ? res.message : "",
+                        });
+                        setLockedConsistentState(false);
+                    }
+                })
+                .catch(err => {
                     this.setState({
                         testExecuting: false,
                         testSuccessful: false,
                         showSnackbar: true,
+                        errorMessage: `Backend error (${err})`,
                     });
-                    setLockedConsistentState(false);
-                }
-            }, 2000);
+                });
         }
     }
 
     render() {
         const {disabled, testInstructions, testTroubleshooting} = this.props;
-        const {testExecuting, testSuccessful, showSnackbar} = this.state;
+        const {testExecuting, testSuccessful, showSnackbar, errorMessage} = this.state;
 
         return (
             <div disabled={disabled}>
@@ -100,9 +118,10 @@ class BaseProcedureTest extends React.Component {
 
                 <FeedbackSnackbar
                     variant={testSuccessful? "success": "error"}
-                    message={testSuccessful? "Test successful. Finalizing the procedure ...": "Test failed. Please check the troubleshooting guide."}
+                    message={testSuccessful? "Test successful. Finalizing the procedure ...": `Test failed. Please check the troubleshooting guide. Error: ${errorMessage}`}
                     show={showSnackbar}
                     onClose={this.handleSnackbarClose}
+                    autoHideDuration={5000}
                 />
             </div>
         );
