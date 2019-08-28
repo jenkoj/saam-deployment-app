@@ -1,6 +1,6 @@
 /* TODO
 - Split into subcomponents.
-
+- Previous state dependency.
 */
 
 import React from 'react';
