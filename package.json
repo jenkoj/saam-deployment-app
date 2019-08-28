@@ -1,0 +1,17 @@
+{
+  "name": "saam-deployment-app-backend",
+  "version": "1.0.0",
+  "scripts": {
+    "frontend": "cd frontend && npm start",
+    "server": "node server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run frontend\""
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "check-internet-connected": "^2.0.1",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1"
+  }
+}
