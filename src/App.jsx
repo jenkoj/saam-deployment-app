@@ -19,16 +19,20 @@ class App extends React.Component {
     }
 
     handleChangePhase = (phase, locationId) => {
-        this.setState({
-            phase: phase,
-            locationId: locationId || this.state.locationId,
-            locationIdLocked: true,
+        this.setState((state) => {
+            return {
+                phase: phase,
+                locationId: locationId || state.locationId,
+                locationIdLocked: true,
+            };
         });
     }
 
     handleLocationIdLockChange = () => {
-        this.setState({
-            locationIdLocked: ! this.state.locationIdLocked,
+        this.setState((state) => {
+            return {
+                locationIdLocked: ! state.locationIdLocked,
+            };
         });
     }
 

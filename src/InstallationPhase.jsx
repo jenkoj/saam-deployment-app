@@ -33,9 +33,11 @@ class InstallationPhase extends React.Component {
 
     handleProcedureFinish = (success, timeout) => {
         this.timer = setTimeout(() => {
-            this.setState({
+            this.setState((state) => {
+                return {
                 currentProcedureId: this.state.currentProcedureId + 1,
                 lockedConsistentState: false,
+                };
             });
         }, timeout);
     }
