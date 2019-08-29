@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const checkInternetConnected = require('check-internet-connected');
+const spawn = require("child_process").spawn;
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -21,20 +22,32 @@ app.get('/test/connectivity', (req, res) => {
 });
 
 app.get('/test/rpi', (req, res) => {
-  res.send({ express: 'Hello From Express' });
+  res.send(getRandomResponse());
 });
 
 app.get('/test/pmc', (req, res) => {
-  res.send({ express: 'Hello From Express' });
+  const pythonProcess = spawn('python',["scripts/check-wiring.py"]);
+  pythonProcess.stdout.on('data', (data) => {
+    console.log(data);
+  });
 });
 
 app.get('/test/uwb', (req, res) => {
-  res.send({ express: 'Hello From Express' });
+  res.send(getRandomResponse());
 });
 
 app.get('/test/microhub', (req, res) => {
-  res.send({ express: 'Hello From Express' });
+  res.send(getRandomResponse());
 });
+
+const getRandomResponse = () => {
+  if(Math.random() < 0.5) {
+    return { successful: true, message: "" };
+  }
+  else {
+    return { successful: false, message: "This is a random error" };
+  }
+}
 
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

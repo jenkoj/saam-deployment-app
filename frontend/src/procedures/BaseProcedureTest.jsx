@@ -47,7 +47,7 @@ class BaseProcedureTest extends React.Component {
 
             setLockedConsistentState(true);
 
-            // Test API call.
+            // Test API call. TODO: timeout if maximum duration is reached.
             this.callApi()
                 .then(res => {
                     if(res && res.successful) {

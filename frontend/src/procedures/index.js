@@ -6,9 +6,12 @@
 import React from 'react';
 
 import ProcedureTestConnectivity from './ProcedureTestConnectivity';
-import ProcedureTestTest1 from './ProcedureTestTest1';
+import ProcedureTestRPi from './ProcedureTestRPi';
 import ProcedureTestPMC from './ProcedureTestPMC';
+import ProcedureTestMicroHub from './ProcedureTestMicroHub';
+import ProcedureTestUWB from './ProcedureTestUWB';
 import ProcedureLabeling from './ProcedureLabeling';
+import ProcedureLabelingNew from './ProcedureLabelingNew';
 
 
 function loadProcedures() {
@@ -20,11 +23,12 @@ function loadProcedures() {
 
     return [
         {title: "Internet connectivity test", component: <ProcedureTestConnectivity {...props} />},
-        {title: "RPi test", component: <ProcedureTestTest1 key="1" {...props} />},
-        {title: "PMC test", component: <ProcedureTestPMC key="2" {...props} />},
-        {title: "MicroHub test", component: <ProcedureTestTest1 key="3" {...props} />},
-        {title: "UWB test", component: <ProcedureTestTest1 key="4" {...props} />},
-        {title: "Appliance labeling", component: <ProcedureLabeling key="5" {...props} />},
+        {title: "RPi test", component: <ProcedureTestRPi {...props} />},
+        {title: "PMC test", component: <ProcedureTestPMC {...props} />},
+        {title: "MicroHub test", component: <ProcedureTestMicroHub {...props} />},
+        {title: "UWB test", component: <ProcedureTestUWB {...props} />},
+        {title: "Appliance labeling", component: <ProcedureLabeling {...props} />},
+        {title: "Appliance labeling (new)", component: <ProcedureLabelingNew {...props} />},
     ];
 }
 
