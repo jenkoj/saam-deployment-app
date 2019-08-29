@@ -26,9 +26,9 @@ app.get('/test/rpi', (req, res) => {
 });
 
 app.get('/test/pmc', (req, res) => {
-  const pythonProcess = spawn('python',["scripts/check-wiring.py"]);
+  const pythonProcess = spawn('python3',["scripts/check-wiring.py"]);
   pythonProcess.stdout.on('data', (data) => {
-    console.log(data);
+    res.send(data);
   });
 });
 
