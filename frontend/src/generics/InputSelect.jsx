@@ -1,4 +1,5 @@
 import React from 'react';
+import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -322,32 +323,60 @@ function InputSelect(props) {
 
     return (
         <NoSsr>
-            <Select
-                classes={classes}
-                styles={selectStyles}
-                inputId="react-select-single"
-                TextFieldProps={{
-                    label: props.label,
-                    InputLabelProps: {
-                        htmlFor: "react-select-single",
-                        shrink: true,
-                    },
-                    error: props.error,
-                    helperText: props.error? "This field is mandatory." : " ",
-                    disabled: props.isDisabled,
-                          
-                }}
-                placeholder={props.placeholder}
-                options={props.options}
-                components={components}
-                value={props.value}
-                onChange={props.onChange}
-                isClearable={props.isClearable}
-                isDisabled={props.isDisabled}
-                autoFocus={props.autoFocus}
-                noOptionsMessage={() => {return props.noOptionsMessage;}}
-                ref={props.innerRef}
-            />
+            {props.creatable ?
+                <CreatableSelect
+                    classes={classes}
+                    styles={selectStyles}
+                    inputId="react-select-single"
+                    TextFieldProps={{
+                        label: props.label,
+                        InputLabelProps: {
+                            htmlFor: "react-select-single",
+                            shrink: true,
+                        },
+                        error: props.error,
+                        helperText: props.error? "This field is mandatory." : " ",
+                        disabled: props.isDisabled,
+                              
+                    }}
+                    placeholder={props.placeholder}
+                    options={props.options}
+                    components={components}
+                    value={props.value}
+                    onChange={props.onChange}
+                    isClearable={props.isClearable}
+                    isDisabled={props.isDisabled}
+                    autoFocus={props.autoFocus}
+                    noOptionsMessage={() => {return props.noOptionsMessage;}}
+                    ref={props.innerRef}
+                />
+            :
+                <Select
+                    classes={classes}
+                    styles={selectStyles}
+                    inputId="react-select-single"
+                    TextFieldProps={{
+                        label: props.label,
+                        InputLabelProps: {
+                            htmlFor: "react-select-single",
+                            shrink: true,
+                        },
+                        error: props.error,
+                        helperText: props.error? "This field is mandatory." : " ",
+                        disabled: props.isDisabled,
+                              
+                    }}
+                    placeholder={props.placeholder}
+                    options={props.options}
+                    components={components}
+                    value={props.value}
+                    onChange={props.onChange}
+                    isClearable={props.isClearable}
+                    isDisabled={props.isDisabled}
+                    autoFocus={props.autoFocus}
+                    noOptionsMessage={() => {return props.noOptionsMessage;}}
+                    ref={props.innerRef}
+                />}
         </NoSsr>
     );
 }
