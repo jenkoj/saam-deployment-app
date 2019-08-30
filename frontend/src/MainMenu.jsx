@@ -78,8 +78,6 @@ class MainMenu extends React.Component {
                             isDisabled={locationIdLocked}
                             placeholder={"E.g., stefanova-15-a-123"}
                             noOptionsMessage={"No matching identifiers."}
-                            locationIdLocked={locationIdLocked}
-                            handleLocationIdLockChange={handleLocationIdLockChange}
                             onChange={this.handleInputChange}
                         />
 
