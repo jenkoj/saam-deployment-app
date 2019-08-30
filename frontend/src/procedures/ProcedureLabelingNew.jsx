@@ -42,7 +42,6 @@ class ProcedureLabelingNew extends React.PureComponent {
             labels: [],
             currentLabels: [],
             confirmationDialogOpen: false,
-            customAppliance: {},
             customLabel: {}
         };
 
@@ -76,10 +75,16 @@ class ProcedureLabelingNew extends React.PureComponent {
     }
 
     handleCancelLabeling = () => {
+        clearInterval(this.timer);
+        this.props.setLockedConsistentState(false);
+
         this.setState({
             labelingPhase: "selection",
             currentStepNum: 0,
             countdownColor: "secondary",
+            showSnackbar: false,
+            countdownPercent: 100,
+            timeoutSecondsLeft: 0,
         });
     }
 
@@ -104,66 +109,69 @@ class ProcedureLabelingNew extends React.PureComponent {
         });
     }
 
-    handleNextStep = () => {
-        this.props.setLockedConsistentState(false);
-
-        const {currentApplianceId, currentStepNum} = this.state;
-
-        if(appliances[currentApplianceId]["labelingSteps"].length <= currentStepNum + 1) {
-
-                this.setState({
-                    labelingPhase: "final",
-                });
-
-        }
-        else {
-            this.setState({
-                currentStepNum: currentStepNum + 1,
-                countdownColor: "secondary",
-            });
-        }
-    }
-
     timeoutOnFinish = () => {
-        const {timeoutSecondsLeft} = this.state;
-        this.setState({
-            timeoutSecondsLeft: timeoutSecondsLeft - 1,
-        });
+        this.setState((state) => {
+            const {timeoutSecondsLeft} = state;
 
-        if(timeoutSecondsLeft <= 1) {
-            clearInterval(this.timer);
-            this.handleNextStep();
-        }
+            if(timeoutSecondsLeft <= 1) {
+                clearInterval(this.timer);
+                this.props.setLockedConsistentState(false);
+
+                const {currentApplianceId, currentStepNum} = state;
+
+                if(appliances[currentApplianceId]["labelingSteps"].length <= currentStepNum + 1) {
+                    return {
+                        labelingPhase: "final",
+                        timeoutSecondsLeft: timeoutSecondsLeft - 1
+                    };
+                }
+                else {
+                    return {
+                        currentStepNum: currentStepNum + 1,
+                        countdownColor: "secondary",
+                        timeoutSecondsLeft: timeoutSecondsLeft - 1
+                    };
+                }
+            }
+            else {
+                return {
+                    timeoutSecondsLeft: timeoutSecondsLeft - 1,
+                };
+            }
+        });
     }
 
     countdown = () => {
-        const {countdownPercent, currentApplianceId, currentStepNum} = this.state;
+        this.setState((state) => {
+            const {countdownPercent} = state;
 
-        if(countdownPercent >= 100) {
-            clearInterval(this.timer);
+            if(countdownPercent >= 100) {
+                clearInterval(this.timer);
+                const {currentApplianceId, currentStepNum, currentLabels} = state;
 
-            let newCurrentLabels = [...this.state.currentLabels];
-            newCurrentLabels.push({
-                appliance: appliances[currentApplianceId].title,
-                time: new Date(),
-                label: appliances[currentApplianceId]["labelingSteps"][currentStepNum]["identifier"],
-            });
-            
-            const timeoutSeconds = appliances[currentApplianceId]["labelingSteps"][currentStepNum]["timeoutOnFinish"] || 0;
-            this.setState({
-                countdownColor: "primary",
-                showSnackbar: true,
-                timeoutSecondsLeft: timeoutSeconds - 1,
-                currentLabels: newCurrentLabels,
-            });
+                let newCurrentLabels = [...currentLabels];
+                newCurrentLabels.push({
+                    time: new Date(),
+                    label: appliances[currentApplianceId]["labelingSteps"][currentStepNum]["identifier"],
+                });
+                
+                const timeoutSeconds = appliances[currentApplianceId]["labelingSteps"][currentStepNum]["timeoutOnFinish"] || 0;
 
-            this.timer = setInterval(this.timeoutOnFinish, 1000);
-        }
-        else {
-            this.setState({
-                countdownPercent: countdownPercent + 1,
-            });
-        }
+                this.timer = setInterval(this.timeoutOnFinish, 1000);
+                return {
+                    countdownColor: "primary",
+                    showSnackbar: true,
+                    timeoutSecondsLeft: timeoutSeconds - 1,
+                    currentLabels: newCurrentLabels,
+                };  
+            }
+            else {
+                return {
+                    countdownPercent: countdownPercent + 1,
+                };
+            }
+        });
+        
     }
 
     handleStartLabelingCountdown = () => {
@@ -175,7 +183,9 @@ class ProcedureLabelingNew extends React.PureComponent {
         this.timer = setInterval(this.countdown, 15);
     }
 
-    handleApplianceChange = (_, currentApplianceId) => this.setState({ currentApplianceId })
+    handleApplianceChange = (_, currentApplianceId) => {
+        this.setState({ currentApplianceId });
+    }
 
     closeConfirmationDialog = () => {
         this.setState({
@@ -202,7 +212,6 @@ class ProcedureLabelingNew extends React.PureComponent {
         this.setState((state) => {
             let newLabels = [...state.labels];
             newLabels.push({
-                appliance: (state.customAppliance && state.customAppliance.label) || "",
                 time: new Date(),
                 label: (state.customLabel && state.customLabel.label) || "",
             });
@@ -216,10 +225,8 @@ class ProcedureLabelingNew extends React.PureComponent {
     render() {
         const {lockedConsistentState, handleProcedureFinish} = this.props;
         const {
-            numOfAppliances,
             timeoutSecondsLeft,
             currentApplianceId,
-            consecutiveApplianceNum,
             currentStepNum,
             countdownPercent,
             countdownColor,
@@ -228,7 +235,6 @@ class ProcedureLabelingNew extends React.PureComponent {
             labels,
             currentLabels,
             confirmationDialogOpen,
-            customAppliance,
             customLabel
         } = this.state;
         const timeoutInProgress = timeoutSecondsLeft > 0;
@@ -236,65 +242,47 @@ class ProcedureLabelingNew extends React.PureComponent {
 
         return (
             <React.Fragment>
-            <Typography>
-                IMPORTANT! Before starting the appliance labeling procedure, all appliances should be turned off, or even unplugged if they have
-        periodic behaviour or they have a stand-by option (especially fridge and appliances with
-        stand-by feature such as TV).
+                <Typography>
+                    IMPORTANT! Before starting the appliance labeling procedure, all appliances should be turned off or even unplugged if they have periodic behaviour or a stand-by option (fridge, TV, ...).
+                </Typography>
 
-            </Typography>
-          <div
-            style={{
-              display: 'flex',
-            }}
-          >
-            <VerticalTabs
-              value={currentApplianceId}
-              onChange={this.handleApplianceChange}
-            >
-                {appliances.map((appliance, aid) => {
-                    return <MyTab key={aid} disabled={labelingPhase === "labeling" || labelingPhase === "final"} label={appliance["title"]} />
-                })}
-                <MyTab key="custom" disabled={labelingPhase === "labeling" || labelingPhase === "final"} label="(Custom)" />
+                <div style={{display: 'flex' }}>
+                    <VerticalTabs
+                        value={currentApplianceId}
+                        onChange={this.handleApplianceChange}
+                    >
+                        {appliances.map((appliance, aid) => {
+                            return <MyTab key={aid} disabled={labelingPhase === "labeling" || labelingPhase === "final"} label={appliance["title"]} />
+                        })}
+                        <MyTab key="custom" disabled={labelingPhase === "labeling" || labelingPhase === "final"} label="(Custom)" />
 
-            </VerticalTabs>
+                    </VerticalTabs>
 
-            <TabContainer>
-                    {labelingPhase === "selection" && (appliances[currentApplianceId] ?
-                                 <Button
-                                    variant="contained"
-                                    color="default"
-                                    onClick={this.beginLabeling}
-                                    fullWidth={true}
-                                >
-                                    Begin {appliances[currentApplianceId].title} labeling
-                                </Button>
-
-                                :
-
-                                <React.Fragment>
-                                    <Typography>
-                                        BEWARE! Using this feature will highly likely invalidate the complete labeling procedure. Please proceed only if you know what you're doing.
-                                    </Typography>
-                                    <FormControl fullWidth={true}>
-                                    <InputSelect
-                                        label={"Please enter the appliance name."}
-                                        creatable={true}
-                                        options={appliances.map((appliance, aid) => {
-                                            return { value: aid, label: appliance.title };
-                                        })}
-                                        value={customAppliance}
-                                        autoFocus={true}
-                                        isClearable={true}
-                                        placeholder={"E.g., Light"}
-                                        noOptionsMessage={"No matching appliances."}
-                                        onChange={this.handleCustomApplianceChange}
-                                    />
+                    <TabContainer>
+                        {labelingPhase === "selection" && (appliances[currentApplianceId] ?
+                             <Button
+                                variant="contained"
+                                color="default"
+                                onClick={this.beginLabeling}
+                                fullWidth={true}
+                            >
+                                Begin {appliances[currentApplianceId].title} labeling
+                            </Button>
+                        :
+                            <React.Fragment>
+                                <Typography>
+                                    BEWARE! Using this feature will highly likely invalidate the complete labeling procedure. Please proceed only if you know what you're doing.
+                                </Typography>
+                                <FormControl fullWidth={true}>
                                     <InputSelect
                                         label={"Please enter the label name."}
                                         creatable={true}
-                                        options={customAppliance && customAppliance.value && appliances[customAppliance.value] && appliances[customAppliance.value].labelingSteps.map((step, sid) => {
-                                            return { value: sid, label: step.identifier };
-                                        })}
+                                        options={appliances.reduce((map, appliance) => {
+                                            map.push(...appliance.labelingSteps.map((step, sid) => {
+                                                return { label: step.identifier };
+                                            }));
+                                            return map;
+                                        }, [])}
                                         value={customLabel}
                                         isClearable={true}
                                         placeholder={"E.g., lightOn"}
@@ -308,184 +296,172 @@ class ProcedureLabelingNew extends React.PureComponent {
                                         onClick={this.createCustomLabel}
                                         fullWidth={true}
                                     >
-                                    Create label
-                                </Button>
-                                    </FormControl>
-                                </React.Fragment>
-                    )}
+                                        Create label
+                                    </Button>
+                                </FormControl>
+                            </React.Fragment>
+                        )}
 
 
-                    {labelingPhase === "labeling" && currentStepNum != null && <React.Fragment>
-                    <Button
-                            disabled={lockedConsistentState && !timeoutInProgress}
-                            variant="contained"
-                            size="small"
-                            onClick={this.handleCancelLabeling}
-                        >
-                            <UndoIcon />
-                            Cancel labeling ALWAYS ENABLED BUT MUST CLEAN THE MESS
-                        </Button>
+                        {labelingPhase === "labeling" && currentStepNum != null && <React.Fragment>
+                            <Button
+                                disabled={lockedConsistentState && !timeoutInProgress}
+                                variant="contained"
+                                size="small"
+                                onClick={this.handleCancelLabeling}
+                            >
+                                <UndoIcon />
+                                Cancel
+                            </Button>
 
-                        <br/>
-
-                        <div>
-
-
-                            <br/><br/>
-                            
-
-                            Step {currentStepNum + 1} out of {appliances[currentApplianceId]["labelingSteps"].length}
                             <br/>
 
-                            {appliances[currentApplianceId]["labelingSteps"][currentStepNum]["text"]}
-                            
                             <div>
-                                <CircularProgress
-                                    variant="determinate"
-                                    thickness={3.6}
-                                    value={countdownPercent}
-                                    color={countdownColor}
-                                />
+                                <br/><br/>
+                                Step {currentStepNum + 1} out of {appliances[currentApplianceId]["labelingSteps"].length}
+                                <br/>
+
+                                {appliances[currentApplianceId]["labelingSteps"][currentStepNum]["text"]}
+                                
+                                <div>
+                                    <CircularProgress
+                                        variant="determinate"
+                                        thickness={3.6}
+                                        value={countdownPercent}
+                                        color={countdownColor}
+                                    />
+                                </div>
                             </div>
-                        </div>
 
-                        <p style={{color: "green"}}>
-                            {timeoutInProgress && <span>Please wait {timeoutSecondsLeft} seconds for the next step.</span>}
-                        </p>
+                            <p style={{color: "green"}}>
+                                {timeoutInProgress && <span>Please wait {timeoutSecondsLeft} seconds for the next step.</span>}
+                            </p>
 
-                        <Button
-                            variant="contained"
-                            color="default"
-                            disabled={lockedConsistentState}
-                            onClick={this.handleStartLabelingCountdown}
-                            fullWidth={true}
-                        >
-                            Start
-                        </Button></React.Fragment>}
-
-
-                    {labelingPhase === "final" && <React.Fragment>
-                        <Button
-                            disabled={lockedConsistentState && !timeoutInProgress}
-                            variant="contained"
-                            size="small"
-                            onClick={this.handleCancelLabeling}
-                        >
-                            <UndoIcon />
-                            Cancel labeling
-                        </Button>
-
-                        <br/>
-
-                        {appliances[currentApplianceId].title} labeling complete.
-                        Labels: <br/> {currentLabels.map((label) => {
-                            return <p>{this.dateFormatter(label.time)}: <b>{label.label}</b></p>;
-                        })}
-                        <br/>
-
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            onClick={this.saveLabels}
-                        >
-                            Confirm & save the labels
-                        </Button>
-                    </React.Fragment>}
+                            <Button
+                                variant="contained"
+                                color="default"
+                                disabled={lockedConsistentState}
+                                onClick={this.handleStartLabelingCountdown}
+                                fullWidth={true}
+                            >
+                                Start
+                            </Button>
+                        </React.Fragment>}
 
 
-                <FeedbackSnackbar
-                    variant={"success"}
-                    message={"Label recorded. Proceeding ..."}
-                    show={showSnackbar}
-                    onClose={this.handleSnackbarClose}
-                />
+                        {labelingPhase === "final" && <React.Fragment>
+                            <Button
+                                disabled={lockedConsistentState && !timeoutInProgress}
+                                variant="contained"
+                                size="small"
+                                onClick={this.handleCancelLabeling}
+                            >
+                                <UndoIcon />
+                                Cancel labeling
+                            </Button>
 
-                <ConfirmationDialog
-                    open={confirmationDialogOpen}
-                    action={() => handleProcedureFinish(true)}
-                    onClose={this.closeConfirmationDialog}
-                    title={"Confirm & submit"}
-                    text={"Are you sure you want to submit the listed labels?"}
-                />
+                            <br/>
+
+                            {appliances[currentApplianceId].title} labeling complete.
+                            Labels: <br/> {currentLabels.map((label) => {
+                                return <p>{this.dateFormatter(label.time)}: <b>{label.label}</b></p>;
+                            })}
+                            <br/>
+
+                            <Button
+                                color="primary"
+                                variant="contained"
+                                onClick={this.saveLabels}
+                            >
+                                Confirm & save the labels
+                            </Button>
+                        </React.Fragment>}
+
+
+                        <FeedbackSnackbar
+                            variant={"success"}
+                            message={"Label recorded. Proceeding ..."}
+                            show={showSnackbar}
+                            onClose={this.handleSnackbarClose}
+                        />
+
+                        <ConfirmationDialog
+                            open={confirmationDialogOpen}
+                            action={() => handleProcedureFinish(true)}
+                            onClose={this.closeConfirmationDialog}
+                            title={"Confirm & submit"}
+                            text={"Are you sure you want to submit the listed labels?"}
+                        />
 
                 
-            </TabContainer>
+                    </TabContainer>
+ 
+                </div>
 
-           
-        </div>
-            <hr/>
+                <hr/>
 
+                <Paper>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Time</TableCell>
+                                <TableCell>Label</TableCell>
+                                <TableCell align="right">Delete</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {labels.map((label, i) => (
+                                <TableRow key={i}>
+                                    <TableCell component="th" scope="row">
+                                        {this.dateFormatter(label.time)}
+                                    </TableCell>
+                                    <TableCell>{label.label}</TableCell>
+                                    <TableCell align="right">
+                                        <IconButton onClick={() => this.deleteLabel(i)}>
+                                            <DeleteIcon/>
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            )).reverse()}
+                        </TableBody>
+                    </Table>
+                </Paper>
 
-
-            <Paper>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Time</TableCell>
-            <TableCell>Appliance</TableCell>
-            <TableCell>Label</TableCell>
-            <TableCell align="right">Delete</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {labels.map((label, i) => (
-            <TableRow key={i}>
-              <TableCell component="th" scope="row">
-                {this.dateFormatter(label.time)}
-              </TableCell>
-              <TableCell>{label.appliance}</TableCell>
-              <TableCell>{label.label}</TableCell>
-              <TableCell align="right">
-                <IconButton onClick={() => this.deleteLabel(i)}>
-                   <DeleteIcon/>
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          )).reverse()}
-        </TableBody>
-      </Table>
-    </Paper>
-
-
-
-
-
-
-            <Button
-                disabled={lockedConsistentState || labelingPhase === "labeling" || labelingPhase === "final" || labels.length === 0}
-                color="primary"
-                variant="contained"
-                onClick={this.submitLabels}
-            >
-                Finish & submit labels
-            </Button>
-        </React.Fragment>
-        )
+                <Button
+                    disabled={lockedConsistentState || labels.length === 0}
+                    color="primary"
+                    variant="contained"
+                    onClick={this.submitLabels}
+                >
+                    Finish & submit labels
+                </Button>
+            </React.Fragment>
+        );
     }
 }
 
 const VerticalTabs = withStyles(theme => ({
-  flexContainer: {
-    flexDirection: 'column'
-  },
-  indicator: {
-    display: 'none',
-  }
+    flexContainer: {
+        flexDirection: 'column'
+    },
+    indicator: {
+        display: 'none',
+    }
 }))(Tabs)
 
 const MyTab = withStyles(theme => ({
-  selected: {
-    color: 'tomato',
-    borderBottom: '2px solid tomato'
+    selected: {
+        color: 'tomato',
+        borderBottom: '2px solid tomato'
   }
 }))(Tab);
 
 function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 24 }}>
-      {props.children}
-    </Typography>
-  );
+    return (
+        <Typography component="div" style={{ padding: 24 }}>
+            {props.children}
+        </Typography>
+    );
 }
 
 export default ProcedureLabelingNew;
