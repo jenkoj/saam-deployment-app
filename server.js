@@ -27,8 +27,19 @@ app.get('/test/rpi', (req, res) => {
 
 app.get('/test/pmc', (req, res) => {
   const pythonProcess = spawn('python3',["scripts/check-wiring.py"]);
+  const timer = setTimeout(() => {
+      pythonProcess.kill(); //kill('SIGKILL')
+      res.send({ successful: false, message: "Test timeout" });
+  }, 5000);
+
   pythonProcess.stdout.on('data', (data) => {
-    res.send(data);
+    clearInterval(timer);
+    if(data == "OK") {
+      res.send({ successful: true, message: "" });
+    }
+    else {
+      res.send({ successful: false, message: data });
+    }
   });
 });
 
