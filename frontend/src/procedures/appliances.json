@@ -1,21 +1,205 @@
 [
     {
-        "title": "Light",
+        "title": "Kitchen light",
         "labelingSteps": [
-            {"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn", "timeoutOnFinish": 5},
-            {"text": "Get ready to turn off the light. Press the START button. When the circle turns blue, turn off the light.", "identifier": "lightOff"}
+            {"text": "Press the START button. When the circle turns blue, turn on the light (one switch, can be multiple lights).", "identifier": "light-kitchen_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the light (one switch, can be multiple lights).", "identifier": "light-kitchen_off", "timeoutOnFinish": 5}
         ]
     },
-    {"title": "Washing machine", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
-    {"title": "Dishwasher", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
-    {"title": "Iron", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
-    {"title": "Water heater", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
-    {"title": "Grinder", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
-    {"title": "Microwave oven", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
-    {"title": "Oven", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
-    {"title": "Stove", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
-    {"title": "Hair dryer", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
-    {"title": "Air conditioning unit", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
-    {"title": "Vacuum cleaner", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]},
-    {"title": "Television", "labelingSteps": [{"text": "Get ready to turn on the light. Press the START button. When the circle turns blue, turn on the light.", "identifier": "lightOn"}]}
+    {
+        "title": "Bedroom light",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the light (one switch, can be multiple lights).", "identifier": "light-bedroom_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the light (one switch, can be multiple lights).", "identifier": "light-bedroom_off", "timeoutOnFinish": 5}
+        ]
+    },
+    {
+        "title": "Living room light",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the light (one switch, can be multiple lights).", "identifier": "light-livingRoom_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the light (one switch, can be multiple lights).", "identifier": "light-livingRoom_off", "timeoutOnFinish": 5}
+        ]
+    },
+    {
+        "title": "Bathroom light",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the light (one switch, can be multiple lights).", "identifier": "light-bathroom_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the light (one switch, can be multiple lights).", "identifier": "light-bathroom_off", "timeoutOnFinish": 5}
+        ]
+    },
+    {
+        "title": "Corridor light",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the light (one switch, can be multiple lights).", "identifier": "light-corridor_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the light (one switch, can be multiple lights).", "identifier": "light-corridor_off", "timeoutOnFinish": 5}
+        ]
+    },
+
+    {
+        "title": "Washing machine",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, put the washing machine on a short cycle (40 degrees C) and turn on the machine.", "identifier": "washingMachine_on", "timeoutOnFinish": 1200},
+            {"text": "Press the START button. When the circle turns blue, turn off the washing machine.", "identifier": "washingMachine_off"}
+        ]
+    },
+
+    {
+        "title": "Dishwasher",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the dishwasher.", "identifier": "dishwasher_on", "timeoutOnFinish": 900},
+            {"text": "Press the START button. When the circle turns blue, turn off the dishwasher.", "identifier": "dishwasher_off"}
+        ]
+    },
+
+    {
+        "title": "Iron",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the iron.", "identifier": "iron_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the iron.", "identifier": "iron_off"}
+        ]
+    },
+    
+    {
+        "title": "Water heater",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the water heater (water in the boiler should not be preheated and should be cold).", "identifier": "waterHeater_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the iron.", "identifier": "waterHeater_off"}
+        ]
+    },
+    
+    {
+        "title": "Grinder/blender",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the grinder/blender.", "identifier": "grinderBlender_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the grinder/blender.", "identifier": "grinderBlender_off"}
+        ]
+    },
+    
+    {
+        "title": "Microwave oven",
+        "labelingSteps": [
+            {"text": "Put something in the microwave oven (e.g. a cup of water). Press the START button. When the circle turns blue, turn on the microwave oven on maximum power.", "identifier": "oven-microwave_on", "timeoutOnFinish": 30},
+            {"text": "Press the START button. When the circle turns blue, turn off the microwave oven.", "identifier": "oven-microwave_off"}
+        ]
+    },
+
+    {
+        "title": "Oven",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the oven.", "identifier": "oven_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the oven.", "identifier": "oven_off"}
+        ]
+    },
+
+    {
+        "title": "Stove (1 ring)",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the first ring on maximum power.", "identifier": "stove-1-rings-1_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the first ring.", "identifier": "stove-1-rings-1_off"}
+        ]
+    },
+
+    {
+        "title": "Stove (2 rings)",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the first ring on maximum power.", "identifier": "stove-2-rings-1_on", "timeoutOnFinish": 10},
+
+            {"text": "Press the START button. When the circle turns blue, turn on the second ring on maximum power.", "identifier": "stove-2-rings-2_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the second ring.", "identifier": "stove-2-rings-2_off", "timeoutOnFinish": 10},
+
+            {"text": "Press the START button. When the circle turns blue, turn off the first ring.", "identifier": "stove-2-rings-1_off"}
+        ]
+    },
+
+    {
+        "title": "Stove (3 rings)",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the first ring on maximum power.", "identifier": "stove-3-rings-1_on", "timeoutOnFinish": 10},
+
+            {"text": "Press the START button. When the circle turns blue, turn on the second ring on maximum power.", "identifier": "stove-3-rings-2_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the second ring.", "identifier": "stove-3-rings-2_off"},
+
+            {"text": "Press the START button. When the circle turns blue, turn on the third ring on maximum power.", "identifier": "stove-3-rings-3_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the third ring.", "identifier": "stove-3-rings-3_off", "timeoutOnFinish": 10},
+
+            {"text": "Press the START button. When the circle turns blue, turn off the first ring.", "identifier": "stove-3-rings-1_off"}
+        ]
+    },
+    
+    {
+        "title": "Stove (4 rings)",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the first ring on maximum power.", "identifier": "stove-4-rings-1_on", "timeoutOnFinish": 10},
+
+            {"text": "Press the START button. When the circle turns blue, turn on the second ring on maximum power.", "identifier": "stove-4-rings-2_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the second ring.", "identifier": "stove-4-rings-2_off"},
+
+            {"text": "Press the START button. When the circle turns blue, turn on the third ring on maximum power.", "identifier": "stove-4-rings-3_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the third ring.", "identifier": "stove-4-rings-3_off"},
+
+            {"text": "Press the START button. When the circle turns blue, turn on the fourth ring on maximum power.", "identifier": "stove-4-rings-4_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the fourth ring.", "identifier": "stove-4-rings-4_off", "timeoutOnFinish": 10},
+
+            {"text": "Press the START button. When the circle turns blue, turn off the first ring.", "identifier": "stove-4-rings-1_off"}
+        ]
+    },
+    
+    {
+        "title": "Hair dryer",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the hair dryer.", "identifier": "hairDryer_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the hair dryer.", "identifier": "hairDryer_off"}
+        ]
+    },
+    
+    {
+        "title": "Air conditioning (cooling)",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the air conditioning unit on cooling.", "identifier": "airConditioning-cooling_on", "timeoutOnFinish": 300},
+            {"text": "Press the START button. When the circle turns blue, turn off the air conditioning unit.", "identifier": "airConditioning-cooling_off"}
+        ]
+    },
+
+    {
+        "title": "Air conditioning (heating)",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the air conditioning unit on heating.", "identifier": "airConditioning-heating_on", "timeoutOnFinish": 300},
+            {"text": "Press the START button. When the circle turns blue, turn off the air conditioning unit.", "identifier": "airConditioning-heating_off"}
+        ]
+    },
+    
+    {
+        "title": "Vacuum cleaner",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the vacuum cleaner.", "identifier": "vacuumCleaner_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the vacuum cleaner.", "identifier": "vacuumCleaner_off"}
+        ]
+    },
+    
+    {
+        "title": "Television",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the television.", "identifier": "television_on"},
+            {"text": "Press the START button. When the circle turns blue, change a channel.", "identifier": "television-channel-1_change"},
+            {"text": "Press the START button. When the circle turns blue, change a channel.", "identifier": "television-channel-2_change"},
+            {"text": "Press the START button. When the circle turns blue, change a channel.", "identifier": "television-channel-3_change", "timeoutOnFinish": 300},
+            {"text": "Press the START button. When the circle turns blue, turn off the television.", "identifier": "television_off"}
+        ]
+    },
+
+    {
+        "title": "Radio/Hi-Fi/Computer",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the radio/Hi-Fi/computer.", "identifier": "radioHiFiComputer_on", "timeoutOnFinish": 300},
+            {"text": "Press the START button. When the circle turns blue, turn off the radio/Hi-Fi/computer.", "identifier": "radioHiFiComputer_off"}
+        ]
+    },
+
+    {
+        "title": "Other electrical heating elements",
+        "labelingSteps": [
+            {"text": "Press the START button. When the circle turns blue, turn on the heating element.", "identifier": "otherHeatingElement_on", "timeoutOnFinish": 10},
+            {"text": "Press the START button. When the circle turns blue, turn off the heating element.", "identifier": "otherHeatingElement_off"}
+        ]
+    }
 ]
