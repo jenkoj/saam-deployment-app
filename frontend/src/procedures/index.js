@@ -16,6 +16,7 @@ import ProcedureLabelingNew from './ProcedureLabelingNew';
 
 function loadProcedures() {
     var props = {
+        ...this.props,
         handleProcedureFinish: this.handleProcedureFinish,
         lockedConsistentState: this.state.lockedConsistentState,
         setLockedConsistentState: this.setLockedConsistentState,
