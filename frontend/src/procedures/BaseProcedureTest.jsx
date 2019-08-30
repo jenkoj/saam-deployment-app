@@ -75,6 +75,7 @@ class BaseProcedureTest extends React.Component {
                         showSnackbar: true,
                         errorMessage: `Backend error (${err})`,
                     });
+                    setLockedConsistentState(false);
                 });
         }
     }
