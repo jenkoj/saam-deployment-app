@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
 
 import loadProcedures from './procedures';
 import NumericalStepper from './generics/NumericalStepper';
@@ -61,9 +62,7 @@ class InstallationPhase extends React.Component {
         const currentProcedure = procedures[currentProcedureId];
 
         return (
-            <div>
-                <Typography variant="subtitle1">Installation</Typography>
-                
+            <React.Fragment>
                 <ConfirmationDialog
                     title={"Terminate the installation phase"}
                     text={"Do you really want to terminate the installation phase?"}
@@ -74,40 +73,52 @@ class InstallationPhase extends React.Component {
 
                 {currentProcedureId < procedures.length ? (
                     <React.Fragment>
-                        <Button
-                            variant="outlined"
-                            color="secondary"
-                            onClick={this.handleOpenConfirmationDialog}
-                            disabled={lockedConsistentState}
-                        >
-                            Terminate the installation phase
-                        </Button>
+                        <div className="ContainerHeader">
+                            <NumericalStepper totalSteps={procedures.length} currentStep={currentProcedureId} />
 
-                        <NumericalStepper totalSteps={procedures.length} currentStep={currentProcedureId} />
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                onClick={this.handleOpenConfirmationDialog}
+                                disabled={lockedConsistentState}
+                            >
+                                Terminate the installation phase
+                            </Button>
+                        </div>
                         
-                        <Typography variant="h6">{currentProcedure["title"]}</Typography>
-                        {currentProcedure["component"]}
-                        
-                        <DismissProcedureButtonDialog
-                            action={() => this.handleProcedureFinish(false)}
-                            disabled={lockedConsistentState}
-                        /> 
+                        <div className="Container">
+                            <Paper style={{padding: "30px"}}>
+
+                                <Typography variant="h5">{currentProcedure["title"]}</Typography>
+
+                                <div style={{margin: "30px 0"}}>
+                                    {currentProcedure["component"]}
+                                </div>
+                                
+                                <DismissProcedureButtonDialog
+                                    action={() => this.handleProcedureFinish(false)}
+                                    disabled={lockedConsistentState}
+                                />
+                            </Paper>
+                        </div>
                     </React.Fragment>
                 ) : (
-                    <React.Fragment>
-                        <p>Installation finished.</p>
+                    <div className="Container">
+                        <Paper style={{padding: "30px"}}>
+                            <p>Installation finished.</p>
 
-                        <Button
-                            variant="contained"
-                            color="default"
-                            fullWidth={true}
-                            onClick={handleBackToMenu}
-                        >
-                            Back to main menu
-                        </Button>
-                    </React.Fragment>
+                            <Button
+                                variant="contained"
+                                color="default"
+                                fullWidth={true}
+                                onClick={handleBackToMenu}
+                            >
+                                Back to main menu
+                            </Button>
+                        </Paper>
+                    </div>
                 )}
-            </div>
+            </React.Fragment>
         );
     }
 }

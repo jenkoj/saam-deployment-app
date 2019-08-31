@@ -1,11 +1,46 @@
 .App {
+  margin-top: 10px;
+  padding: 0 10%;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.Container {
+  text-align: center;
+  min-height: 75vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: #FEFEFE;
+  max-width: 1000px;
+  padding: 40px 0;
+}
+
+.ContainerHeader {
+  max-width: 1000px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.MenuContainer {
+  text-align: center;
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #FEFEFE;
+  max-width: 520px;
+  padding: 40px 0;
+  width: 100%;
 }
 
 div[disabled]

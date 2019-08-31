@@ -7,6 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
 
 import loadProcedures from './procedures';
 import DismissProcedureButtonDialog from './DismissProcedureButtonDialog';
@@ -56,56 +57,59 @@ class MaintenancePhase extends React.Component {
         const currentProcedure = procedures[currentProcedureId];
 
         return (
-            <div>
-                <Typography variant="subtitle1">Maintenance</Typography>
+            <div className="Container">
+                <Paper style={{padding: "30px"}}>
+                    {currentProcedureId != null ? (
+                        <React.Fragment>
+                            <Typography variant="h5">{currentProcedure["title"]}</Typography>
 
-                {currentProcedureId != null ? (
-                    <React.Fragment>
-                        <Typography variant="h6">{currentProcedure["title"]}</Typography>
-                        {currentProcedure["component"]} 
-                                        
-                        <DismissProcedureButtonDialog
-                            action={() => this.handleProcedureFinish(false)}
-                            disabled={lockedConsistentState}
-                        />
-                    </React.Fragment>
-                ) : (
-                    <React.Fragment>
-                        <List
-                            component="nav"
-                            aria-labelledby="nested-list-subheader"
-                            subheader={
-                                <ListSubheader
-                                    component="div"
-                                    id="nested-list-subheader"
-                                >
-                                    Select a procedure.
-                                </ListSubheader>
-                            }
-                        >
-                            {procedures.map((proc, pid) => {
-                                return (
-                                    <ListItem key={pid} button onClick={() => this.handleDisplayProcedure(pid)}>
-                                        <ListItemIcon>
-                                            <KeyboardArrowRightIcon />
-                                        </ListItemIcon>
+                            <div style={{margin: "30px 0"}}>
+                                {currentProcedure["component"]} 
+                            </div>
 
-                                        <ListItemText primary={proc.title} />
-                                    </ListItem>
-                                );
-                            })}
-                        </List>
+                            <DismissProcedureButtonDialog
+                                action={() => this.handleProcedureFinish(false)}
+                                disabled={lockedConsistentState}
+                            />
+                        </React.Fragment>
+                    ) : (
+                        <React.Fragment>
+                            <List
+                                component="nav"
+                                aria-labelledby="nested-list-subheader"
+                                subheader={
+                                    <ListSubheader
+                                        component="div"
+                                        id="nested-list-subheader"
+                                    >
+                                        Select a procedure.
+                                    </ListSubheader>
+                                }
+                            >
+                                {procedures.map((proc, pid) => {
+                                    return (
+                                        <ListItem key={pid} button onClick={() => this.handleDisplayProcedure(pid)}>
+                                            <ListItemIcon>
+                                                <KeyboardArrowRightIcon />
+                                            </ListItemIcon>
 
-                        <Button
-                            variant="contained"
-                            color="default"
-                            fullWidth={true}
-                            onClick={handleBackToMenu}
-                        >
-                            Back to main menu
-                        </Button>
-                    </React.Fragment>
-                )}
+                                            <ListItemText primary={proc.title} />
+                                        </ListItem>
+                                    );
+                                })}
+                            </List>
+
+                            <Button
+                                variant="contained"
+                                color="default"
+                                fullWidth={true}
+                                onClick={handleBackToMenu}
+                            >
+                                Back to main menu
+                            </Button>
+                        </React.Fragment>
+                    )}
+                </Paper>
             </div>
         );
     }

@@ -1,5 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import AppBar from '@material-ui/core/AppBar';
 
 import MainMenu from './MainMenu';
 import MaintenancePhase from './MaintenancePhase'
@@ -38,11 +39,16 @@ class App extends React.Component {
 
     render() {
         const {phase, locationId, locationIdLocked} = this.state;
+        const subtitle = phase === "installation" ? "Installation" : (phase === "maintenance" ? "Maintenance" : null);
 
         return (
-            <div className="App">
-                <Typography variant="h4">SAAM - Installation and maintenance application</Typography>
+            <React.Fragment>
+                <AppBar position="static" style={{alignItems: "center", padding:  "15px"}}>
+                    <Typography variant="h5"><b>SAAM</b> | Installation and maintenance application</Typography>
+                    {subtitle && <div style={{ fontSize: 'small', fontWeight: 300 }}>{subtitle}</div>}
+                </AppBar>
                 
+                <div className="App">
                 {{
                     menu: <MainMenu
                         locationId={locationId}
@@ -54,7 +60,8 @@ class App extends React.Component {
                     installation: <InstallationPhase handleBackToMenu={() => this.handleChangePhase("menu")} locationId={locationId} />,
                     maintenance: <MaintenancePhase handleBackToMenu={() => this.handleChangePhase("menu")} locationId={locationId} />,
                 }[phase]}
-            </div>
+                </div>
+            </React.Fragment>
         );
     }
 }

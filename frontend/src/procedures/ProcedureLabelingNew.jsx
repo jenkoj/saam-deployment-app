@@ -243,8 +243,10 @@ class ProcedureLabelingNew extends React.PureComponent {
         return (
             <React.Fragment>
                 <Typography>
-                    IMPORTANT! Before starting the appliance labeling procedure, all appliances should be turned off or even unplugged if they have periodic behaviour or a stand-by option (fridge, TV, ...).
+                    <b>IMPORTANT</b>: Before starting the appliance labeling procedure, all appliances should be turned off or even unplugged if they have periodic behaviour or a stand-by option (fridge, TV, ...).
                 </Typography>
+
+                <br/>
 
                 <div style={{display: 'flex' }}>
                     <VerticalTabs
@@ -259,146 +261,161 @@ class ProcedureLabelingNew extends React.PureComponent {
                     </VerticalTabs>
 
                     <TabContainer>
-                        {labelingPhase === "selection" && (appliances[currentApplianceId] ?
-                             <Button
-                                variant="contained"
-                                color="default"
-                                onClick={this.beginLabeling}
-                                fullWidth={true}
-                            >
-                                Begin {appliances[currentApplianceId].title} labeling
-                            </Button>
-                        :
-                            <React.Fragment>
-                                <Typography>
-                                    BEWARE! Using this feature will highly likely invalidate the complete labeling procedure. Please proceed only if you know what you're doing.
-                                </Typography>
-                                <FormControl fullWidth={true}>
-                                    <InputSelect
-                                        label={"Please enter the label name."}
-                                        creatable={true}
-                                        options={appliances.reduce((map, appliance) => {
-                                            map.push(...appliance.labelingSteps.map((step, sid) => {
-                                                return { label: step.identifier };
-                                            }));
-                                            return map;
-                                        }, [])}
-                                        value={customLabel}
-                                        isClearable={true}
-                                        placeholder={"E.g., lightOn"}
-                                        noOptionsMessage={"No matching labels."}
-                                        onChange={this.handleCustomLabelChange}
-                                    />
+                        <Paper style={{padding: "30px"}}>
+                            {labelingPhase === "selection" && (appliances[currentApplianceId] ?
+                                 <Button
+                                    variant="outlined"
+                                    color="default"
+                                    onClick={this.beginLabeling}
+                                    fullWidth={true}
+                                >
+                                    Begin {appliances[currentApplianceId].title} labeling
+                                </Button>
+                            :
+                                <React.Fragment>
+                                    <Typography>
+                                        <b>Using this feature will highly likely invalidate the complete labeling procedure. Please proceed only if you know what you're doing.</b>
+                                    </Typography>
 
-                                    <Button
-                                        variant="contained"
-                                        color="default"
-                                        onClick={this.createCustomLabel}
-                                        fullWidth={true}
-                                    >
-                                        Create label
-                                    </Button>
-                                </FormControl>
-                            </React.Fragment>
-                        )}
+                                    <br/>
+
+                                    <FormControl fullWidth={true}>
+                                        <InputSelect
+                                            label={"Enter the label name."}
+                                            creatable={true}
+                                            options={appliances.reduce((map, appliance) => {
+                                                map.push(...appliance.labelingSteps.map((step, sid) => {
+                                                    return { label: step.identifier };
+                                                }));
+                                                return map;
+                                            }, [])}
+                                            value={customLabel}
+                                            isClearable={true}
+                                            placeholder={"E.g., lightOn"}
+                                            noOptionsMessage={"No matching labels."}
+                                            onChange={this.handleCustomLabelChange}
+                                        />
+
+                                        <Button
+                                            variant="contained"
+                                            color="default"
+                                            onClick={this.createCustomLabel}
+                                            fullWidth={true}
+                                        >
+                                            Create label
+                                        </Button>
+                                    </FormControl>
+                                </React.Fragment>
+                            )}
 
 
-                        {labelingPhase === "labeling" && currentStepNum != null && <React.Fragment>
-                            <Button
-                                disabled={lockedConsistentState && !timeoutInProgress}
-                                variant="contained"
-                                size="small"
-                                onClick={this.handleCancelLabeling}
-                            >
-                                <UndoIcon />
-                                Cancel
-                            </Button>
+                            {labelingPhase === "labeling" && currentStepNum != null && <React.Fragment>
+                                <Button
+                                    disabled={lockedConsistentState && !timeoutInProgress}
+                                    variant="outlined"
+                                    size="small"
+                                    color="secondary"
+                                    onClick={this.handleCancelLabeling}
+                                >
+                                    <UndoIcon />
+                                    Cancel
+                                </Button>
 
-                            <br/>
-
-                            <div>
-                                <br/><br/>
-                                Step {currentStepNum + 1} out of {appliances[currentApplianceId]["labelingSteps"].length}
                                 <br/>
 
-                                {appliances[currentApplianceId]["labelingSteps"][currentStepNum]["text"]}
-                                
                                 <div>
-                                    <CircularProgress
-                                        variant="determinate"
-                                        thickness={3.6}
-                                        value={countdownPercent}
-                                        color={countdownColor}
-                                    />
+                                    <br/><br/>
+                                    <i>Step {currentStepNum + 1} out of {appliances[currentApplianceId]["labelingSteps"].length}:</i>
+                                    <br/>
+
+                                    {appliances[currentApplianceId]["labelingSteps"][currentStepNum]["text"]}
+                                    
+                                    <br/><br/>
+
+                                    <div>
+                                        <CircularProgress
+                                            variant="determinate"
+                                            thickness={3.6}
+                                            value={countdownPercent}
+                                            color={countdownColor}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <p style={{color: "green"}}>
-                                {timeoutInProgress && <span>Please wait {timeoutSecondsLeft} seconds for the next step.</span>}
-                            </p>
+                                <p style={{color: "green"}}>
+                                    {timeoutInProgress && <span>Please wait <b>{timeoutSecondsLeft}</b> seconds for the next step.</span>}
+                                </p>
 
-                            <Button
-                                variant="contained"
-                                color="default"
-                                disabled={lockedConsistentState}
-                                onClick={this.handleStartLabelingCountdown}
-                                fullWidth={true}
-                            >
-                                Start
-                            </Button>
-                        </React.Fragment>}
-
-
-                        {labelingPhase === "final" && <React.Fragment>
-                            <Button
-                                disabled={lockedConsistentState && !timeoutInProgress}
-                                variant="contained"
-                                size="small"
-                                onClick={this.handleCancelLabeling}
-                            >
-                                <UndoIcon />
-                                Cancel labeling
-                            </Button>
-
-                            <br/>
-
-                            {appliances[currentApplianceId].title} labeling complete.
-                            Labels: <br/> {currentLabels.map((label) => {
-                                return <p>{this.dateFormatter(label.time)}: <b>{label.label}</b></p>;
-                            })}
-                            <br/>
-
-                            <Button
-                                color="primary"
-                                variant="contained"
-                                onClick={this.saveLabels}
-                            >
-                                Confirm & save the labels
-                            </Button>
-                        </React.Fragment>}
+                                <Button
+                                    variant="contained"
+                                    color="default"
+                                    disabled={lockedConsistentState}
+                                    onClick={this.handleStartLabelingCountdown}
+                                    fullWidth={true}
+                                >
+                                    Start
+                                </Button>
+                            </React.Fragment>}
 
 
-                        <FeedbackSnackbar
-                            variant={"success"}
-                            message={"Label recorded. Proceeding ..."}
-                            show={showSnackbar}
-                            onClose={this.handleSnackbarClose}
-                        />
+                            {labelingPhase === "final" && <React.Fragment>
+                                <Button
+                                    disabled={lockedConsistentState && !timeoutInProgress}
+                                    variant="outlined"
+                                    size="small"
+                                    color="secondary"
+                                    onClick={this.handleCancelLabeling}
+                                >
+                                    <UndoIcon />
+                                    Cancel
+                                </Button>
 
-                        <ConfirmationDialog
-                            open={confirmationDialogOpen}
-                            action={() => handleProcedureFinish(true)}
-                            onClose={this.closeConfirmationDialog}
-                            title={"Confirm & submit"}
-                            text={"Are you sure you want to submit the listed labels?"}
-                        />
+                                <br/>
 
-                
+                                <div>
+                                    <br/><br/>
+
+                                    {appliances[currentApplianceId].title} labeling complete.
+                                    Labels: <br/> {currentLabels.map((label) => {
+                                        return <p>{this.dateFormatter(label.time)}: <b>{label.label}</b></p>;
+                                    })}
+                                </div>
+
+                                <br/>
+
+                                <Button
+                                    color="primary"
+                                    variant="contained"
+                                    onClick={this.saveLabels}
+                                >
+                                    Confirm & save the labels
+                                </Button>
+                            </React.Fragment>}
+
+
+                            <FeedbackSnackbar
+                                variant={"success"}
+                                message={"Label recorded. Proceeding ..."}
+                                show={showSnackbar}
+                                onClose={this.handleSnackbarClose}
+                            />
+
+                            <ConfirmationDialog
+                                open={confirmationDialogOpen}
+                                action={() => handleProcedureFinish(true)}
+                                onClose={this.closeConfirmationDialog}
+                                title={"Confirm & submit"}
+                                text={"Are you sure you want to submit the listed labels?"}
+                            />
+
+                        </Paper>
                     </TabContainer>
  
                 </div>
 
+                <br/>
                 <hr/>
+                <br/>
 
                 <Paper>
                     <Table>
@@ -426,6 +443,8 @@ class ProcedureLabelingNew extends React.PureComponent {
                         </TableBody>
                     </Table>
                 </Paper>
+
+                <br/>
 
                 <Button
                     disabled={lockedConsistentState || labels.length === 0}
@@ -458,7 +477,7 @@ const MyTab = withStyles(theme => ({
 
 function TabContainer(props) {
     return (
-        <Typography component="div" style={{ padding: 24 }}>
+        <Typography component="div" style={{ padding: 24, width: "100%" }}>
             {props.children}
         </Typography>
     );

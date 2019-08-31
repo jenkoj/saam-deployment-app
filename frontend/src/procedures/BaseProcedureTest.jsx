@@ -90,6 +90,8 @@ class BaseProcedureTest extends React.Component {
                     {testInstructions}
                 </Typography>
 
+                <br/>
+
                 <ExpansionPanel>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -105,6 +107,8 @@ class BaseProcedureTest extends React.Component {
                         </Typography>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
+
+                <br/>
 
                 <Grid container justify="center">
                     <CircularProgressButton

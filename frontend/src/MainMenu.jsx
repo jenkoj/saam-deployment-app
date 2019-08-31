@@ -4,6 +4,7 @@ import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+import Paper from '@material-ui/core/Paper';
 
 import InputSelect from './generics/InputSelect';
 
@@ -64,52 +65,55 @@ class MainMenu extends React.Component {
         const {locationId, inputError} = this.state;
 
         return (
-            <div>
-                <div>
-                    <FormControl fullWidth={true}>
-                        <InputSelect
-                            label={"Please enter the location identifier."}
-                            innerRef={this.inputField}
-                            options={locationIdOptions}
-                            error={inputError}
-                            value={locationId}
-                            autoFocus={true}
-                            isClearable={true}
-                            isDisabled={locationIdLocked}
-                            placeholder={"E.g., stefanova-15-a-123"}
-                            noOptionsMessage={"No matching identifiers."}
-                            onChange={this.handleInputChange}
-                        />
+            <div className="MenuContainer">
+                <FormControl fullWidth={true}>
+                <Paper style={{padding: "30px"}}>
+                    <InputSelect
+                        label={"Please enter the location identifier."}
+                        innerRef={this.inputField}
+                        options={locationIdOptions}
+                        error={inputError}
+                        value={locationId}
+                        autoFocus={true}
+                        isClearable={true}
+                        isDisabled={locationIdLocked}
+                        placeholder={"E.g., stefanova-15-a-123"}
+                        noOptionsMessage={"No matching identifiers."}
+                        onChange={this.handleInputChange}
+                    />
 
-                        <IconButton
-                            disabled={locationId == null}
-                            aria-label="Lock the location identifier"
-                            onClick={handleLocationIdLockChange}
-                        >
-                            {locationIdLocked? <LockOutlinedIcon /> : <LockOpenIcon />}
-                        </IconButton>
-                    </FormControl>
-                </div>
-
-                <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    fullWidth={true}
-                    onClick={() => {this.validateInput(handleInstallationStart)}}
-                >
-                    SAAM system installation
-                </Button>
+                    <IconButton
+                        disabled={locationId == null}
+                        aria-label="Lock the location identifier"
+                        onClick={handleLocationIdLockChange}
+                    >
+                        {locationIdLocked? <LockOutlinedIcon /> : <LockOpenIcon />}
+                    </IconButton>
                 
-                <Button
-                    variant="outlined"
-                    color="default"
-                    size="small"
-                    fullWidth={true}
-                    onClick={() => {this.validateInput(handleMaintenanceStart)}}
-                >
-                    Maintenance
-                </Button>
+
+                    <Button
+                        style={{marginTop: "20px"}}
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        fullWidth={true}
+                        onClick={() => {this.validateInput(handleInstallationStart)}}
+                    >
+                        SAAM system installation
+                    </Button>
+                    
+                    <Button
+                        style={{marginTop: "5px"}}
+                        variant="outlined"
+                        color="default"
+                        size="small"
+                        fullWidth={true}
+                        onClick={() => {this.validateInput(handleMaintenanceStart)}}
+                    >
+                        Maintenance
+                    </Button>
+                </Paper>
+                </FormControl>
             </div>
         );
     }
