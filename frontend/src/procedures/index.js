@@ -11,7 +11,6 @@ import ProcedureTestPMC from './ProcedureTestPMC';
 import ProcedureTestMicroHub from './ProcedureTestMicroHub';
 import ProcedureTestUWB from './ProcedureTestUWB';
 import ProcedureLabeling from './ProcedureLabeling';
-import ProcedureLabelingNew from './ProcedureLabelingNew';
 
 
 function loadProcedures() {
@@ -29,7 +28,6 @@ function loadProcedures() {
         {title: "MicroHub test", component: <ProcedureTestMicroHub {...props} />},
         {title: "UWB test", component: <ProcedureTestUWB {...props} />},
         {title: "Appliance labeling", component: <ProcedureLabeling {...props} />},
-        {title: "Appliance labeling (new)", component: <ProcedureLabelingNew {...props} />},
     ];
 }
 
