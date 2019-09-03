@@ -22,7 +22,7 @@ app.get('/test/connectivity', (req, res) => {
 });
 
 app.get('/test/rpi', (req, res) => {
-  res.send(getRandomResponse());
+  res.send({ successful: false, message: "This test is not implemented. Please dismiss this procedure." });
 });
 
 app.get('/test/pmc', (req, res) => {
@@ -44,21 +44,12 @@ app.get('/test/pmc', (req, res) => {
 });
 
 app.get('/test/uwb', (req, res) => {
-  res.send(getRandomResponse());
+  res.send({ successful: false, message: "This test is not implemented. Please dismiss this procedure." });
 });
 
 app.get('/test/microhub', (req, res) => {
-  res.send(getRandomResponse());
+  res.send({ successful: false, message: "This test is not implemented. Please dismiss this procedure." });
 });
-
-const getRandomResponse = () => {
-  if(Math.random() < 0.5) {
-    return { successful: true, message: "" };
-  }
-  else {
-    return { successful: false, message: "This is a random error" };
-  }
-}
 
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
