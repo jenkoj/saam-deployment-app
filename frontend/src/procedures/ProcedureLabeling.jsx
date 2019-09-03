@@ -243,7 +243,7 @@ class ProcedureLabeling extends React.PureComponent {
         return (
             <React.Fragment>
                 <Typography>
-                    <b>IMPORTANT</b>: Before starting the appliance labeling procedure, all appliances should be turned off or even unplugged if they have periodic behaviour or a stand-by option (fridge, TV, ...).
+                    <b>IMPORTANT</b>: Before starting the appliance labeling procedure, all appliances should be turned off or even unplugged if they have periodic behaviour or a stand-by option (fridge, TV, boiler, washing machine, ...), otherwise the labeling procedure might be invalid. The device list is ordered by labeling complexity, begin labeling from the top of the list. Labeling of dishwashers and washing machines takes 15 and 30 minutes respectively, if this is not feasible, select the <i>short</i> option.
                 </Typography>
 
                 <br/>
