@@ -29,16 +29,17 @@ app.get('/test/pmc', (req, res) => {
   const pythonProcess = spawn('python3',["scripts/check-wiring.py"]);
   const timer = setTimeout(() => {
       pythonProcess.kill(); //kill('SIGKILL')
-      res.send({ successful: false, message: "Test timeout" });
-  }, 5000);
+      res.send({ successful: false, message: "Test timeout: Device turned off or Wi-Fi not connected." });
+  }, 12000);
 
   pythonProcess.stdout.on('data', (data) => {
     clearInterval(timer);
-    if(data == "OK") {
+    const decodedData = data.toString('utf8');
+    if(decodedData == "OK") {
       res.send({ successful: true, message: "" });
     }
     else {
-      res.send({ successful: false, message: data });
+      res.send({ successful: false, message: decodedData });
     }
   });
 });
