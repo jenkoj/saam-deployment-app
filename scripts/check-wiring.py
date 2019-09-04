@@ -5,10 +5,7 @@ import subprocess
 import zerorpc
 import sys
 import os
- #add avahi damon restart
-def save_ip_txt(ip):
-	f= open("pmc_ip.csv","w+")
-	f.write(ip)
+ 
 
 
 def get_service(service_name):
@@ -28,7 +25,7 @@ def get_service(service_name):
 		time.sleep(5)
 		cntr += 3
 		if cntr > 1:
-			print("Device not found, please try again",end='')
+			print("Device not found, please try again. Check if PMC is connected to power.",end='')
 			exit()
 		
 		
@@ -46,7 +43,7 @@ if True:
 		msg = c.test("response: %s" % service_name)
 		print(msg,end='')
 	except:
-		print("Device not found",end='')
+		print("Device not found, please try again. Check if PMC is connected to power.",end='')
 		
 sys.stdout.flush()
 
