@@ -9,8 +9,8 @@ class ProcedureTestRPi extends React.Component {
         return (
             <div>
                 <BaseProcedureTest
-                    testInstructions={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur at diam mauris. Donec lorem magna, fringilla id nisi eget, sagittis pellentesque orci. Donec ullamcorper vel sapien pharetra hendrerit. Fusce vitae felis fringilla, faucibus lectus nec, malesuada urna. Aliquam maximus vestibulum nibh. Curabitur porta leo elit, sodales euismod ex feugiat eu. Ut convallis, massa sit amet auctor aliquet, eros velit mattis justo, fermentum hendrerit magna metus sed magna. Pellentesque eget mi pulvinar, porttitor turpis vitae, gravida eros. Cras urna risus, sollicitudin id magna facilisis, rutrum dapibus felis. Integer varius sapien eros, nec suscipit magna pharetra id. Aliquam in purus congue, elementum enim id, accumsan metus. Suspendisse quis ex sed nisi feugiat feugiat id eu ex. Vestibulum lacinia ligula et lectus porta egestas. Donec facilisis tortor ut tristique sodales."}
-                    testTroubleshooting={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget."}
+                    testInstructions={"Ambient sensor must be placed somewhere in living room. Since sensor listens to voice commands its best that it is NOT placed near audio source such as TV or radio. It also includes on board temperature and humidity sensors meaning any direct sunlight would corrupt measurements. It must not be placed near places where temperature and humidity variations are high such as windows or kitchen."}
+                    testTroubleshooting={"Troubleshooting is in response"}
                     testAPI="/test/rpi"
                     {...this.props}
                 />
