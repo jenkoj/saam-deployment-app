@@ -9,8 +9,8 @@ class ProcedureTestUWB extends React.Component {
         return (
             <div>
                 <BaseProcedureTest
-                    testInstructions={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur at diam mauris. Donec lorem magna, fringilla id nisi eget, sagittis pellentesque orci. Donec ullamcorper vel sapien pharetra hendrerit. Fusce vitae felis fringilla, faucibus lectus nec, malesuada urna. Aliquam maximus vestibulum nibh. Curabitur porta leo elit, sodales euismod ex feugiat eu. Ut convallis, massa sit amet auctor aliquet, eros velit mattis justo, fermentum hendrerit magna metus sed magna. Pellentesque eget mi pulvinar, porttitor turpis vitae, gravida eros. Cras urna risus, sollicitudin id magna facilisis, rutrum dapibus felis. Integer varius sapien eros, nec suscipit magna pharetra id. Aliquam in purus congue, elementum enim id, accumsan metus. Suspendisse quis ex sed nisi feugiat feugiat id eu ex. Vestibulum lacinia ligula et lectus porta egestas. Donec facilisis tortor ut tristique sodales."}
-                    testTroubleshooting={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget."}
+                    testInstructions={"Two UWB devices in a socket-on-socket enclosures should be placed in different parts of an appartment and not obstructed by any big obstructions (e.g. placed behind sofa etc.). All three UWB devices should be deployed in a shape as close to equilateral triangle shape as possible. If they are placed in a straight line (colinear) the system can’t work and test will return the layout error."}
+                    testTroubleshooting={"UWB localization test checks if all UWB devices activity and the correctness of UWB devices layout (placement)."}
                     testAPI="/test/uwb"
                     {...this.props}
                 />
