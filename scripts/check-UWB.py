@@ -4,7 +4,7 @@ import zerorpc
 c = zerorpc.Client()
 c.connect("tcp://127.0.0.1:4242")
 
-if (c.checkActiveDevices() == OK || c.checkUWBLayout == OK):
+if (c.checkActiveDevices() == OK and c.checkUWBLayout == OK):
    print("OK")
 
 else if c.checkActiveDevices() != OK:
