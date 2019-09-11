@@ -25,7 +25,7 @@ def get_service(service_name):
 		time.sleep(5)
 		cntr += 3
 		if cntr > 1:
-			print("Device not found, please try again. Check if PMC is connected to power.",end='')
+			print("Device not found, please try again. Check if ambient sensor is connected to power.",end='')
 			exit()
 		
 		
@@ -43,7 +43,7 @@ if True:
 		msg = c.test("response: %s" % service_name)
 		print(msg,end='')
 	except:
-		print("Device not found, please try again. Check if PMC is connected to power.",end='')
+		print("Device not found, please try again. Check if ambient sensor is connected to power.",end='')
 		
 sys.stdout.flush()
 
