@@ -9,8 +9,8 @@ class ProcedureTestMicroHub extends React.Component {
         return (
             <div>
                 <BaseProcedureTest
-                    testInstructions={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur at diam mauris. Donec lorem magna, fringilla id nisi eget, sagittis pellentesque orci. Donec ullamcorper vel sapien pharetra hendrerit. Fusce vitae felis fringilla, faucibus lectus nec, malesuada urna. Aliquam maximus vestibulum nibh. Curabitur porta leo elit, sodales euismod ex feugiat eu. Ut convallis, massa sit amet auctor aliquet, eros velit mattis justo, fermentum hendrerit magna metus sed magna. Pellentesque eget mi pulvinar, porttitor turpis vitae, gravida eros. Cras urna risus, sollicitudin id magna facilisis, rutrum dapibus felis. Integer varius sapien eros, nec suscipit magna pharetra id. Aliquam in purus congue, elementum enim id, accumsan metus. Suspendisse quis ex sed nisi feugiat feugiat id eu ex. Vestibulum lacinia ligula et lectus porta egestas. Donec facilisis tortor ut tristique sodales."}
-                    testTroubleshooting={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget."}
+                    testInstructions={"Turn on all available MicroHub devices (press power button until green light is lit), and place them near eGW. Run MicroHub test procedure. Each microhub device is searched for, discovered and connected. If there are no MicroHub devices configured test will emidiately return success. If all devices are properly configured return value of test is 0. If any other value is returned, deployment test did not succeed, and reason for fail will be written to the console."}
+                    testTroubleshooting={"Test that 1.MicroHub device is turned on (green led light is on) 2.other devices (e.g. mobile phone) are not connected to MicroHub 3.MicroHub device is in proximity of eGW If test still fail, please request replacement microHub device."}
                     testAPI="/test/microhub"
                     {...this.props}
                 />

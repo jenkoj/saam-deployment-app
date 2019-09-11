@@ -10,7 +10,7 @@ class ProcedureTestConnectivity extends React.Component {
             <div>
                 <BaseProcedureTest
                     testInstructions={"As you can see this screen, it is highly likely that all the components so far are correctly installed. Press the button below to test whether there is internet connectivity."}
-                    testTroubleshooting={"It is helpless."}
+                    testTroubleshooting={"Check if router is connected as in installation video."}
                     testAPI="/test/connectivity"
                     {...this.props}
                 />
