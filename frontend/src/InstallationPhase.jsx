@@ -98,6 +98,8 @@ class InstallationPhase extends React.Component {
                                 <DismissProcedureButtonDialog
                                     action={() => this.handleProcedureFinish(false)}
                                     disabled={lockedConsistentState}
+                                    procTitle={currentProcedure["title"]}
+                                    {...this.props}
                                 />
                             </Paper>
                         </div>

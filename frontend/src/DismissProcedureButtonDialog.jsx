@@ -18,6 +18,25 @@ function DismissProcedureButtonDialog(props) {
 
     const {disabled, action} = props;
 
+    let report = async (comment) => {
+        const testData = {
+            locationId: props.locationId.value || "",
+            status: "abort",
+            phase: props.phase,
+            testName: props.procTitle || "",
+            timestamp: (new Date()).getTime(),
+            comment: comment || ""
+        };
+        const response = await fetch("/report/test", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(testData)
+        });
+        return await response;
+    };
+
     function handleClickOpen() {
         setOpen(true);
     }
@@ -35,6 +54,7 @@ function DismissProcedureButtonDialog(props) {
     }
 
     function handleAction() {
+        report(radioValue === "problem" ? textValue : "Not applicable");
         setTextValue("");
         setRadioValue("problem");
         handleClose();

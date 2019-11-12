@@ -5,6 +5,9 @@ const path = require('path');
 const checkInternetConnected = require('check-internet-connected');
 const spawn = require("child_process").spawn;
 
+const { Pool } = require("pg");
+const pool = new Pool(require("./pgconfig"));
+
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -90,6 +93,36 @@ app.get('/test/uwb', (req, res) => {
 
 app.get('/test/microhub', (req, res) => {
   res.send({ successful: false, message: "This test is not implemented. Please dismiss this procedure." });
+});
+
+app.post('/report/test', (req, res) => {
+  const queryString = `INSERT INTO tests(
+    locationid, phase, timestamp, testname, status, comment
+  ) VALUES(
+  '${req.body.locationId}',
+  '${req.body.phase}',
+  ${req.body.timestamp},
+  '${req.body.testName}',
+  '${req.body.status}',
+  '${req.body.comment}'
+  )`;
+
+  pool.query(queryString, (err, result) => {
+    if (err !== undefined) {
+      console.log("Postgres INSERT error:", err);
+      console.log("Postgres error position:", err.position);
+    }
+
+    if (result !== undefined) {
+      if (result.rowCount > 0) {
+        console.log("# of records inserted:", result.rowCount);
+      } else {
+        console.log("No records were inserted.");
+      }
+    }
+
+    res.send();
+  });
 });
 
 

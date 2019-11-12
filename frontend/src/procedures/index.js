@@ -22,12 +22,12 @@ function loadProcedures() {
     };
 
     return [
-        {title: "Internet connectivity test", component: <ProcedureTestConnectivity {...props} />},
-        {title: "Ambient sensor test", component: <ProcedureTestRPi {...props} />},
-        {title: "PMC test", component: <ProcedureTestPMC {...props} />},
-        //{title: "MicroHub test", component: <ProcedureTestMicroHub {...props} />},
-        {title: "UWB test", component: <ProcedureTestUWB {...props} />},
-        {title: "Appliance labeling", component: <ProcedureLabeling {...props} />},
+        {title: "Internet connectivity test", component: <ProcedureTestConnectivity {...props} procTitle="Internet connectivity test" />},
+        {title: "Ambient sensor test", component: <ProcedureTestRPi {...props} procTitle="Ambient sensor test" />},
+        {title: "PMC test", component: <ProcedureTestPMC {...props} procTitle="PMC test" />},
+        //{title: "MicroHub test", component: <ProcedureTestMicroHub {...props} procTitle="MicroHub test" />},
+        {title: "UWB test", component: <ProcedureTestUWB {...props} procTitle="UWB test" />},
+        {title: "Appliance labeling", component: <ProcedureLabeling {...props} procTitle="Appliance labeling" />},
     ];
 }
 

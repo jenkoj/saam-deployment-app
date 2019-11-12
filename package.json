@@ -11,7 +11,8 @@
     "body-parser": "^1.18.3",
     "check-internet-connected": "^2.0.1",
     "express": "^4.16.4",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "pg": "^7.12.1"
   },
   "devDependencies": {
     "concurrently": "^4.0.1"
