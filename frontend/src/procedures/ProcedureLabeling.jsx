@@ -48,7 +48,20 @@ class ProcedureLabeling extends React.PureComponent {
         this.timer = null;
     }
 
+    callDataRecordingApi = async (api) => {
+        const response = await fetch(api);
+        const body = await response.json();
+        if (response.status !== 200) throw Error(body.message);
+        
+        return body;
+    };
+
+    componentDidMount = () => {
+        this.callDataRecordingApi("/labeling/start");
+    }
+
     componentWillUnmount = () => {
+        this.callDataRecordingApi("/labeling/stop");
         clearInterval(this.timer);
     }
 
@@ -222,8 +235,36 @@ class ProcedureLabeling extends React.PureComponent {
         });
     }
 
+    report = async () => {
+        const testData = {
+            locationId: this.props.locationId.value || "",
+            phase: this.props.phase,
+            labels: this.state.labels.map((x) => { return {time: x.time.getTime(), label: x.label }; })
+        };
+        const response = await fetch("/report/labels", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(testData)
+        });
+        return await response;
+    };
+
+    sendLabelsToDb = () => {
+        this.props.setLockedConsistentState(true);
+        this.setState({
+            sendingDataLock: true
+        });
+        this.callDataRecordingApi("/labeling/stop");
+        this.timer = setTimeout(() => {
+            this.report();
+            this.props.handleProcedureFinish(true);
+        }, 4000);
+    }
+
     render() {
-        const {lockedConsistentState, handleProcedureFinish} = this.props;
+        const {lockedConsistentState} = this.props;
         const {
             timeoutSecondsLeft,
             currentApplianceId,
@@ -235,15 +276,19 @@ class ProcedureLabeling extends React.PureComponent {
             labels,
             currentLabels,
             confirmationDialogOpen,
-            customLabel
+            customLabel,
+            sendingDataLock
         } = this.state;
         const timeoutInProgress = timeoutSecondsLeft > 0;
 
+        if (sendingDataLock) {
+            return "Uploading labels ...";
+        }
 
         return (
             <React.Fragment>
                 <Typography>
-                    <b>IMPORTANT</b>: Before starting the appliance labeling procedure, all appliances should be turned off or even unplugged if they have periodic behaviour or a stand-by option (fridge, TV, boiler, washing machine, ...), otherwise the labeling procedure might be invalid. The device list is ordered by labeling complexity, begin labeling from the top of the list. Labeling of dishwashers and washing machines takes 15 and 30 minutes respectively, if this is not feasible, select the <i>short</i> option.
+                    <b>IMPORTANT</b>: Before starting the appliance labeling procedure, all appliances should be turned off or even unplugged if they have periodic behaviour or a stand-by option (fridge, TV, boiler, washing machine, ...), otherwise the labeling procedure might be invalid. The device list is ordered by labeling complexity, begin labeling from the top of the list. Labeling of dishwashers and washing machines takes 15 and 30 minutes respectively, if this is not feasible, select the <i>short</i> option. Please make sure that that there is internet connectivity (internet connectivity test), otherwise the labels will not be recorded.
                 </Typography>
 
                 <br/>
@@ -402,7 +447,7 @@ class ProcedureLabeling extends React.PureComponent {
 
                             <ConfirmationDialog
                                 open={confirmationDialogOpen}
-                                action={() => handleProcedureFinish(true)}
+                                action={this.sendLabelsToDb}
                                 onClose={this.closeConfirmationDialog}
                                 title={"Confirm & submit"}
                                 text={"Are you sure you want to submit the listed labels?"}
