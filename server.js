@@ -96,6 +96,10 @@ app.get('/test/microhub', (req, res) => {
   res.send({ successful: false, message: "This test is not implemented. Please dismiss this procedure." });
 });
 
+app.get('/test/voice', (req, res) => {
+  res.send({ successful: false, message: "This procedure is not implemented. Please dismiss this procedure." });
+});
+
 app.post('/report/test', (req, res) => {
   const queryString = `INSERT INTO tests(
     locationid, phase, timestamp, testname, status, comment
