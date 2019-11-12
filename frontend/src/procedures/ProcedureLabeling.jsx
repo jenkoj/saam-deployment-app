@@ -180,7 +180,7 @@ class ProcedureLabeling extends React.PureComponent {
             countdownPercent: 0,
         });
 
-        this.timer = setInterval(this.countdown, 15);
+        this.timer = setInterval(this.countdown, 40);
     }
 
     handleApplianceChange = (_, currentApplianceId) => {
