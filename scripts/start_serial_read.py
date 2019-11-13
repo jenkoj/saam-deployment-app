@@ -37,22 +37,22 @@ c = zerorpc.Client()
 c.connect("tcp://%s:4503" % ip)
 
 #state.txt tells us when to stop the program
-f2 = open("state.txt","r")
+f2 = open("state.txt","w")
 f2.write("1")
 status = 1
 
 #clear file
 f = open("data.csv","w+")
-f.write("")
 
 while status == 1:
 	if True:
 			try:
 				#c.read is zerorpc call
 				msg = c.read(" ")
-				print(msg,end='') #comment this line after debuging
+				#print(msg,end='') #comment this line after debuging
 				f = open("data.csv","a") #maybe you dont need that line
 				f.write(msg)
+				f.close()
 
 			except:
 					print("corrupted data",end='')           
@@ -60,6 +60,7 @@ while status == 1:
 	time.sleep(.25)
 	f2 = open("state.txt","r")
 	status = int(f2.read())
+	f2.close()
 
-f.close()
-f2.close()
+
+
