@@ -5,7 +5,8 @@
     "frontend": "cd frontend && npm start",
     "server": "node server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run frontend\"",
-    "production": "cd frontend && npm run build && cd .. && NODE_ENV=production node server.js"
+    "production": "cd frontend && npm run build  && cd .. && NODE_ENV=production node server.js",
+    "deployment": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
