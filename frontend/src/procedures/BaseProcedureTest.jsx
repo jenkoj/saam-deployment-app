@@ -33,7 +33,26 @@ class BaseProcedureTest extends React.Component {
         if (response.status !== 200) throw Error(body.message);
         
         return body;
-      };
+    };
+
+    report = async (success, comment) => {
+        const testData = {
+            locationId: this.props.locationId.value || "",
+            status: success ? "pass" : "fail",
+            phase: this.props.phase,
+            testName: this.props.procTitle || "",
+            timestamp: (new Date()).getTime(),
+            comment: comment || ""
+        };
+        const response = await fetch("/report/test", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(testData)
+        });
+        return await response;
+    };
 
     handleExecuteTest = () => {
         if(!this.state.testExecuting) {
@@ -51,6 +70,7 @@ class BaseProcedureTest extends React.Component {
             this.callApi()
                 .then(res => {
                     if(res && res.successful) {
+                        this.report(true);
                         this.setState({
                             testExecuting: false,
                             testSuccessful: true,
@@ -59,6 +79,7 @@ class BaseProcedureTest extends React.Component {
                         handleProcedureFinish(true, 3000);
                     }
                     else {
+                        this.report(false, res && res.message);
                         this.setState({
                             testExecuting: false,
                             testSuccessful: false,

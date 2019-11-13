@@ -3,9 +3,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const fs = require('fs');
 
 const checkInternetConnected = require('check-internet-connected');
 const spawn = require("child_process").spawn;
+
+const { Pool } = require("pg");
+const pool = new Pool(require("./pgconfig"));
 
 const app = express();
 const port = process.env.PORT || 80;
@@ -92,6 +96,88 @@ app.get('/test/uwb', (req, res) => {
 
 app.get('/test/microhub', (req, res) => {
   res.send({ successful: false, message: "This test is not implemented. Please dismiss this procedure." });
+});
+
+app.get('/test/voice', (req, res) => {
+  res.send({ successful: false, message: "This procedure is not implemented. Please dismiss this procedure." });
+});
+
+app.post('/report/test', (req, res) => {
+  const queryString = `INSERT INTO tests(
+    locationid, phase, timestamp, testname, status, comment
+  ) VALUES(
+  '${req.body.locationId}',
+  '${req.body.phase}',
+  ${req.body.timestamp},
+  '${req.body.testName}',
+  '${req.body.status}',
+  '${req.body.comment}'
+  )`;
+
+  pool.query(queryString, (err, result) => {
+    if (err !== undefined) {
+      console.log("Postgres INSERT error:", err);
+      console.log("Postgres error position:", err.position);
+    }
+
+    if (result !== undefined) {
+      if (result.rowCount > 0) {
+        console.log("# of records inserted:", result.rowCount);
+      } else {
+        console.log("No records were inserted.");
+      }
+    }
+
+    res.send();
+  });
+});
+
+app.get('/labeling/start', (req, res) => {
+  console.log("Started recording raw pmc data.");
+  const pythonProcess = spawn('python3',["scripts/start_serial_read.py"]);
+  res.send();
+});
+
+app.get('/labeling/stop', (req, res) => {
+  console.log("Stopped recording raw pmc data.");
+  const pythonProcess = spawn('python3',["scripts/stop_serial_read.py"]);
+  res.send();
+});
+
+app.post('/report/labels', (req, res) => {
+  let measurements = "";
+  try {
+    measurements = fs.readFileSync("data.csv", { encoding: 'utf8' });
+  }
+  catch {
+
+  }
+
+  const queryString = `INSERT INTO labels(
+    locationid, phase, labels, measurements
+  ) VALUES(
+  '${req.body.locationId}',
+  '${req.body.phase}',
+  '${JSON.stringify(req.body.labels)}',
+  '${measurements}'
+  )`;
+
+  pool.query(queryString, (err, result) => {
+    if (err !== undefined) {
+      console.log("Postgres INSERT error:", err);
+      console.log("Postgres error position:", err.position);
+    }
+
+    if (result !== undefined) {
+      if (result.rowCount > 0) {
+        console.log("# of records inserted:", result.rowCount);
+      } else {
+        console.log("No records were inserted.");
+      }
+    }
+
+    res.send();
+  });
 });
 
 

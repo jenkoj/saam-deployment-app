@@ -9,19 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import InputSelect from './generics/InputSelect';
 
 
-const locationIdOptions = [
-    { value: 'id1', label: 'stefanova-15-a-123' },
-    { value: 'id2', label: 'ijs-39' },
-    { value: 'id3', label: 'jamova-15-app' },
-    { value: 'id4', label: 'jamova-app' },
-    { value: 'id5', label: 'jamova-11-app' },
-    { value: 'id6', label: 'jamova-19-app' },
-    { value: 'id7', label: 'jamova-155-app' },
-    { value: 'id8', label: 'svetceva-15-app' },
-    { value: 'id9', label: 'jamova-15' },
-    { value: 'unspecified', label: 'Unspecified' },
-];
-
+const locationIdOptions = [ { value: 'unspecified', label: 'Unspecified' } ].concat([...Array(100).keys()].map((x) => { return { value: "loc-" + x, label: "loc-" + x }; }));
+//
 class MainMenu extends React.Component {
     constructor(props) {
         super(props);
@@ -77,7 +66,7 @@ class MainMenu extends React.Component {
                         autoFocus={true}
                         isClearable={true}
                         isDisabled={locationIdLocked}
-                        placeholder={"E.g., stefanova-15-a-123"}
+                        placeholder={"E.g., loc-42"}
                         noOptionsMessage={"No matching identifiers."}
                         onChange={this.handleInputChange}
                     />
