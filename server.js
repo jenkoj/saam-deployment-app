@@ -162,6 +162,16 @@ app.post('/report/labels', (req, res) => {
   '${measurements}'
   )`;
 
+  const output = `${req.body.locationId}\t${req.body.phase}\t${JSON.stringify(req.body.labels)}\n\n${measurements}`;
+
+  fs.writeFile(`./data/${(new Date()).getTime()}.csv`, output, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("Labels and raw pmc data saved to file!");
+  }); 
+
   pool.query(queryString, (err, result) => {
     if (err !== undefined) {
       console.log("Postgres INSERT error:", err);
