@@ -12,12 +12,12 @@ const { Pool } = require("pg");
 const pool = new Pool(require("./pgconfig"));
 
 const app = express();
-const port = process.env.PORT || 80;
+const port = process.env.PORT || (process.env.NODE_ENV === "production" ? 80 : 5000);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-if(process.env.NODE_ENV == "production") {
+if(process.env.NODE_ENV === "production") {
   console.log("Running the production build.");
   app.use(express.static(path.join(__dirname, 'frontend/build')));
   app.get('/', function(req, res) {
@@ -161,6 +161,16 @@ app.post('/report/labels', (req, res) => {
   '${JSON.stringify(req.body.labels)}',
   '${measurements}'
   )`;
+
+  const output = `${req.body.locationId}\t${req.body.phase}\t${JSON.stringify(req.body.labels)}\n\n${measurements}`;
+
+  fs.writeFile(`./data/${(new Date()).getTime()}.csv`, output, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("Labels and raw pmc data saved to file!");
+  }); 
 
   pool.query(queryString, (err, result) => {
     if (err !== undefined) {
