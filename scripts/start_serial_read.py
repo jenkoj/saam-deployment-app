@@ -50,9 +50,8 @@ while status == 1:
 				#c.read is zerorpc call
 				msg = c.read(" ")
 				#print(msg,end='') #comment this line after debuging
-				f = open("data.csv","a") #maybe you dont need that line
 				f.write(msg)
-				f.close()
+				
 
 			except:
 					print("corrupted data",end='')           
@@ -62,5 +61,4 @@ while status == 1:
 	status = int(f2.read())
 	f2.close()
 
-
-
+f.close()
