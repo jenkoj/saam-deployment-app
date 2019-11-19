@@ -102,7 +102,7 @@ app.get('/test/voice', (req, res) => {
   const pythonProcess = spawn('python3',["scripts/check-voice.py"]);
   const timer = setTimeout(() => {
       pythonProcess.kill(); //kill('SIGKILL')
-      res.send({ successful: false, message: "Test timeout: Device turned off o$
+      res.send({ successful: false, message: "Test timeout: Device turned off or Wi-Fi not connected." });
   }, 12000);
 
   pythonProcess.stdout.on('data', (data) => {
