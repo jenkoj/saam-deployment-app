@@ -28,13 +28,15 @@ def get_service(service_name):
 			print("Device not found, please try again. Check if PMC is connected to power.",end='')
 			exit()
 		
-		
-			
+
 #first start avahi-daemon with "service_name"
 service_name = "saam-pmc"
 ip = get_service(service_name)
 c = zerorpc.Client()
 c.connect("tcp://%s:4503" % ip)
+
+#turn off algortim that reads serial port on pmc
+c.NILMoff(" ")
 
 #state.txt tells us when to stop the program
 f2 = open("state.txt","w")
@@ -62,3 +64,4 @@ while status == 1:
 	f2.close()
 
 f.close()
+c.NILMon(" ")
