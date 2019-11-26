@@ -9,16 +9,19 @@ import Paper from '@material-ui/core/Paper';
 import InputSelect from './generics/InputSelect';
 
 
-const locationIdOptions = [ { value: 'unspecified', label: 'Unspecified' } ].concat([...Array(100).keys()].map((x) => { return { value: "loc-" + x, label: "loc-" + x }; }));
-//
+const countryOptions = [ { value: 'AT', label: 'Austria' }, { value: 'BG', label: 'Bulgaria' }, { value: 'SLO', label: 'Slovenia' } ];
+
 class MainMenu extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             locationId: props.locationId,
             inputError: false,
+            country: props.country,
+            countryError: false,
         }
         this.inputField = React.createRef();
+        this.countryField = React.createRef();
 
     }
 
@@ -26,11 +29,27 @@ class MainMenu extends React.Component {
         this.setState({
             locationId: value,
             inputError: false,
+            countryError: false,
+        });
+    }
+
+    handleCountryChange = (value) => {
+        this.setState({
+            country: value,
+            inputError: false,
+            countryError: false,
+            locationId: null,
         });
     }
 
     validateInput = (callback) => {
-        if(this.state.locationId == null) {
+        if(this.state.country == null) {
+            this.setState({
+                countryError: true,
+            });
+            this.countryField.current.focus();
+        }
+        else if(this.state.locationId == null) {
             this.setState({
                 inputError: true,
             });
@@ -39,8 +58,9 @@ class MainMenu extends React.Component {
         else {
             this.setState({
                 inputError: false,
+                countryError: false,
             });
-            callback(this.state.locationId);
+            callback(this.state.country, this.state.locationId);
         }
     }
 
@@ -51,28 +71,45 @@ class MainMenu extends React.Component {
             locationIdLocked,
             handleLocationIdLockChange
         } = this.props;
-        const {locationId, inputError} = this.state;
+        const { locationId, inputError, countryError, country } = this.state;
 
+        const locationIdOptions = country
+            ? [ { value: 'unspecified', label: 'Unspecified' } ].concat([...Array(99).keys()].map((x) => { return { value: country.value + ("0" + (x + 1)).substr(-2), label: country.value + ("0" + (x + 1)).substr(-2) }; }))
+            : [];
         return (
             <div className="MenuContainer">
                 <FormControl fullWidth={true}>
                 <Paper style={{padding: "30px"}}>
+                    <InputSelect
+                        label={"Please enter the country."}
+                        innerRef={this.countryField}
+                        options={countryOptions}
+                        error={countryError}
+                        value={country}
+                        autoFocus={true}
+                        isClearable={true}
+                        isDisabled={locationIdLocked}
+                        placeholder={"E.g., Austria"}
+                        noOptionsMessage={"No matching countries."}
+                        onChange={this.handleCountryChange}
+                    />
+
                     <InputSelect
                         label={"Please enter the location identifier."}
                         innerRef={this.inputField}
                         options={locationIdOptions}
                         error={inputError}
                         value={locationId}
-                        autoFocus={true}
+                        autoFocus={false}
                         isClearable={true}
-                        isDisabled={locationIdLocked}
-                        placeholder={"E.g., loc-42"}
+                        isDisabled={locationIdLocked || ! country}
+                        placeholder={"E.g., AT42"}
                         noOptionsMessage={"No matching identifiers."}
                         onChange={this.handleInputChange}
                     />
 
                     <IconButton
-                        disabled={locationId == null}
+                        disabled={locationId == null || country == null}
                         aria-label="Lock the location identifier"
                         onClick={handleLocationIdLockChange}
                     >

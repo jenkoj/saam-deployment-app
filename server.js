@@ -99,7 +99,22 @@ app.get('/test/microhub', (req, res) => {
 });
 
 app.get('/test/voice', (req, res) => {
-  res.send({ successful: false, message: "This procedure is not implemented. Please dismiss this procedure." });
+  const pythonProcess = spawn('python3',["scripts/check-voice.py"]);
+  const timer = setTimeout(() => {
+      pythonProcess.kill(); //kill('SIGKILL')
+      res.send({ successful: false, message: "Test timeout: Device turned off or Wi-Fi not connected." });
+  }, 12000);
+
+  pythonProcess.stdout.on('data', (data) => {
+    clearInterval(timer);
+    const decodedData = data.toString('utf8');
+    if(decodedData == "OK") {
+      res.send({ successful: true, message: "" });
+    }
+    else {
+      res.send({ successful: false, message: decodedData });
+    }
+  });
 });
 
 app.post('/report/test', (req, res) => {
