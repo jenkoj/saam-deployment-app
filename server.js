@@ -205,5 +205,20 @@ app.post('/report/labels', (req, res) => {
   });
 });
 
+app.post('/init/locationid', (req, res) => {
+  const output = req.body.locationId;
+  const path = "/etc/lgtc/loc-id";
+
+  fs.writeFile(path, output, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("Location ID file updated, path: " + path);
+  }); 
+
+  res.send();
+});
+
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

@@ -42,6 +42,20 @@ class MainMenu extends React.Component {
         });
     }
 
+    saveLocationId = async () => {
+        const data = {
+            locationId: (this.state.locationId && this.state.locationId.value) || "",
+        };
+        const response = await fetch("/init/locationid", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+        return await response;
+    };
+
     validateInput = (callback) => {
         if(this.state.country == null) {
             this.setState({
@@ -60,6 +74,8 @@ class MainMenu extends React.Component {
                 inputError: false,
                 countryError: false,
             });
+
+            this.saveLocationId();
             callback(this.state.country, this.state.locationId);
         }
     }
