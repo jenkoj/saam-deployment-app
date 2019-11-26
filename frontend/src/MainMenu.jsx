@@ -74,7 +74,7 @@ class MainMenu extends React.Component {
         const { locationId, inputError, countryError, country } = this.state;
 
         const locationIdOptions = country
-            ? [ { value: 'unspecified', label: 'Unspecified' } ].concat([...Array(99).keys()].map((x) => { return { value: country.value + ("0" + (x + 1)).substr(-2), label: country.value + ("0" + (x + 1)).substr(-2) }; }))
+            ? [ { value: country.value + '-unspecified', label: 'Unspecified' } ].concat([...Array(99).keys()].map((x) => { return { value: country.value + ("0" + (x + 1)).substr(-2), label: country.value + ("0" + (x + 1)).substr(-2) }; }))
             : [];
         return (
             <div className="MenuContainer">
