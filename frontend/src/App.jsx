@@ -60,8 +60,8 @@ class App extends React.Component {
                         handleInstallationStart={(country, locationId) => this.handleChangePhase("installation", country, locationId)}
                         handleMaintenanceStart={(country, locationId) => this.handleChangePhase("maintenance", country, locationId)}
                     />,
-                    installation: <InstallationPhase handleBackToMenu={() => this.handleChangePhase("menu")} locationId={locationId} phase={phase} />,
-                    maintenance: <MaintenancePhase handleBackToMenu={() => this.handleChangePhase("menu")} locationId={locationId} phase={phase} />,
+                    installation: <InstallationPhase handleBackToMenu={() => this.handleChangePhase("menu")} locationId={locationId} country={country} phase={phase} />,
+                    maintenance: <MaintenancePhase handleBackToMenu={() => this.handleChangePhase("menu")} locationId={locationId} country={country} phase={phase} />,
                 }[phase]}
                 </div>
             </React.Fragment>

@@ -22,15 +22,26 @@ function loadProcedures() {
         setLockedConsistentState: this.setLockedConsistentState,
     };
 
-    return [
-        {title: "Internet connectivity test", component: <ProcedureTestConnectivity {...props} procTitle="Internet connectivity test" />},
-        {title: "Ambient sensor test", component: <ProcedureTestRPi {...props} procTitle="Ambient sensor test" />},
-        {title: "Voice module training", component: <ProcedureTestRPiVoice {...props} procTitle="Voice module training" />},
-        {title: "PMC test", component: <ProcedureTestPMC {...props} procTitle="PMC test" />},
-        //{title: "MicroHub test", component: <ProcedureTestMicroHub {...props} procTitle="MicroHub test" />},
-        {title: "UWB test", component: <ProcedureTestUWB {...props} procTitle="UWB test" />},
-        {title: "Appliance labeling", component: <ProcedureLabeling {...props} procTitle="Appliance labeling" />},
-    ];
+    if (props && props.country && props.country.value && props.country.value === "AT") {
+        return [
+            {title: "Internet connectivity test", component: <ProcedureTestConnectivity {...props} procTitle="Internet connectivity test" />},
+            {title: "Ambient sensor test", component: <ProcedureTestRPi {...props} procTitle="Ambient sensor test" />},
+            {title: "Voice module training", component: <ProcedureTestRPiVoice {...props} procTitle="Voice module training" />},
+            //{title: "MicroHub test", component: <ProcedureTestMicroHub {...props} procTitle="MicroHub test" />},
+            {title: "UWB test", component: <ProcedureTestUWB {...props} procTitle="UWB test" />},
+        ];
+    }
+    else {
+        return [
+            {title: "Internet connectivity test", component: <ProcedureTestConnectivity {...props} procTitle="Internet connectivity test" />},
+            {title: "Ambient sensor test", component: <ProcedureTestRPi {...props} procTitle="Ambient sensor test" />},
+            {title: "Voice module training", component: <ProcedureTestRPiVoice {...props} procTitle="Voice module training" />},
+            {title: "PMC test", component: <ProcedureTestPMC {...props} procTitle="PMC test" />},
+            //{title: "MicroHub test", component: <ProcedureTestMicroHub {...props} procTitle="MicroHub test" />},
+            {title: "UWB test", component: <ProcedureTestUWB {...props} procTitle="UWB test" />},
+            {title: "Appliance labeling", component: <ProcedureLabeling {...props} procTitle="Appliance labeling" />},
+        ];
+    }
 }
 
 
