@@ -64,7 +64,7 @@ class MainMenu extends React.Component {
 
     saveLocationId = async () => {
         const data = {
-            locationId: (this.state.locationId && this.state.locationId.value) || "",
+            locationId: (this.state.locationId && this.state.locationId.value) || "\n",
         };
         const response = await fetch("/init/locationid", {
             method: "POST",
