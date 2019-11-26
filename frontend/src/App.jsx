@@ -15,15 +15,17 @@ class App extends React.Component {
         this.state = {
             phase: "menu",
             locationId: null,
+            country: null,
             locationIdLocked: false,
         }
     }
 
-    handleChangePhase = (phase, locationId) => {
+    handleChangePhase = (phase, country, locationId) => {
         this.setState((state) => {
             return {
                 phase: phase,
                 locationId: locationId || state.locationId,
+                country: country || state.country,
                 locationIdLocked: true,
             };
         });
@@ -38,7 +40,7 @@ class App extends React.Component {
     }
 
     render() {
-        const {phase, locationId, locationIdLocked} = this.state;
+        const { phase, locationId, locationIdLocked, country } = this.state;
         const subtitle = phase === "installation" ? "Installation" : (phase === "maintenance" ? "Maintenance" : null);
 
         return (
@@ -52,10 +54,11 @@ class App extends React.Component {
                 {{
                     menu: <MainMenu
                         locationId={locationId}
+                        country={country}
                         locationIdLocked={locationIdLocked}
                         handleLocationIdLockChange={this.handleLocationIdLockChange}
-                        handleInstallationStart={(locationId) => this.handleChangePhase("installation", locationId)}
-                        handleMaintenanceStart={(locationId) => this.handleChangePhase("maintenance", locationId)}
+                        handleInstallationStart={(country, locationId) => this.handleChangePhase("installation", country, locationId)}
+                        handleMaintenanceStart={(country, locationId) => this.handleChangePhase("maintenance", country, locationId)}
                     />,
                     installation: <InstallationPhase handleBackToMenu={() => this.handleChangePhase("menu")} locationId={locationId} phase={phase} />,
                     maintenance: <MaintenancePhase handleBackToMenu={() => this.handleChangePhase("menu")} locationId={locationId} phase={phase} />,
