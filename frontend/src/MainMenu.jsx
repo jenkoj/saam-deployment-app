@@ -7,6 +7,7 @@ import LockOpenIcon from '@material-ui/icons/LockOpen';
 import Paper from '@material-ui/core/Paper';
 
 import InputSelect from './generics/InputSelect';
+import ConfirmationDialog from './generics/ConfirmationDialog';
 
 
 const countryOptions = [ { value: 'AT', label: 'Austria' }, { value: 'BG', label: 'Bulgaria' }, { value: 'SLO', label: 'Slovenia' } ];
@@ -19,6 +20,7 @@ class MainMenu extends React.Component {
             inputError: false,
             country: props.country,
             countryError: false,
+            isConfirmationDialogOpen: false,
         }
         this.inputField = React.createRef();
         this.countryField = React.createRef();
@@ -40,6 +42,24 @@ class MainMenu extends React.Component {
             countryError: false,
             locationId: null,
         });
+    }
+
+    handleCloseConfirmationDialog = () => {
+        this.setState({
+            isConfirmationDialogOpen: false,
+        });
+    }
+
+    handleOpenConfirmationDialog = (callback) => {
+        this.setState({
+            isConfirmationDialogOpen: true,
+            confirmationCallback: callback,
+        });
+    }
+
+    handleConfirmationAction = () => {
+        this.saveLocationId();
+        this.state.confirmationCallback(this.state.country, this.state.locationId);
     }
 
     saveLocationId = async () => {
@@ -75,8 +95,8 @@ class MainMenu extends React.Component {
                 countryError: false,
             });
 
-            this.saveLocationId();
-            callback(this.state.country, this.state.locationId);
+            // Open confirmation dialog.
+            this.handleOpenConfirmationDialog(callback);
         }
     }
 
@@ -87,13 +107,21 @@ class MainMenu extends React.Component {
             locationIdLocked,
             handleLocationIdLockChange
         } = this.props;
-        const { locationId, inputError, countryError, country } = this.state;
+        const { locationId, inputError, countryError, country, isConfirmationDialogOpen } = this.state;
 
         const locationIdOptions = country
             ? [ { value: country.value + '-unspecified', label: 'Unspecified' } ].concat([...Array(99).keys()].map((x) => { return { value: country.value + ("0" + (x + 1)).substr(-2), label: country.value + ("0" + (x + 1)).substr(-2) }; }))
             : [];
         return (
             <div className="MenuContainer">
+                <ConfirmationDialog
+                    title={"Confirm the location identifier"}
+                    text=<p>{"Please make sure the location identifier is correctly selected."} <br/> {"Is the location identifier "}<b>{locationId && locationId.value}</b>{" correct?"}</p>
+                    open={isConfirmationDialogOpen}
+                    onClose={this.handleCloseConfirmationDialog}
+                    action={this.handleConfirmationAction}
+                />
+
                 <FormControl fullWidth={true}>
                 <Paper style={{padding: "30px"}}>
                     <InputSelect
