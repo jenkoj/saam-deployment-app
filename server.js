@@ -206,7 +206,7 @@ app.post('/report/labels', (req, res) => {
 });
 
 app.post('/init/locationid', (req, res) => {
-  const output = req.body.locationId;
+  const output = req.body.locationId + "\r\n";
   const path = "/etc/lgtc/loc-id";
 
   fs.writeFile(path, output, function(err) {
