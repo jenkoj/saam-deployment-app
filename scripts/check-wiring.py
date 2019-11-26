@@ -1,5 +1,7 @@
-import csv
+#!/usr/bin/env python3
+
 import time
+import csv
 import socket
 import subprocess 
 import zerorpc
@@ -35,12 +37,14 @@ service_name = "saam-pmc"
 ip = get_service(service_name)
 
 
+loc_id = open('/etc/lgtc/loc-id').readline().strip()
+
 c = zerorpc.Client()
 c.connect("tcp://%s" % ip)
 
 if True:
 	try:
-		msg = c.test("response: %s" % service_name)
+		msg = c.test(loc_id) ##send location id
 		print(msg,end='')
 	except:
 		print("Device not found, please try again. Check if PMC is connected to power.",end='')
