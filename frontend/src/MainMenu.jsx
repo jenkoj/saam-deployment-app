@@ -10,7 +10,7 @@ import InputSelect from './generics/InputSelect';
 import ConfirmationDialog from './generics/ConfirmationDialog';
 
 
-const countryOptions = [ { value: 'AT', label: 'Austria' }, { value: 'BG', label: 'Bulgaria' }, { value: 'SLO', label: 'Slovenia' } ];
+const countryOptions = [ { value: 'AT', label: 'Austria' }, { value: 'BG', label: 'Bulgaria' }, { value: 'SI', label: 'Slovenia' } ];
 
 class MainMenu extends React.Component {
     constructor(props) {
