@@ -39,7 +39,7 @@ class BaseProcedureTest extends React.Component {
         const testData = {
             locationId: this.props.locationId.value || "",
             status: success ? "pass" : "fail",
-            phase: this.props.phase,
+            phase: this.props.phase || "",
             testName: this.props.procTitle || "",
             timestamp: (new Date()).getTime(),
             comment: comment || ""
@@ -94,7 +94,7 @@ class BaseProcedureTest extends React.Component {
                         testExecuting: false,
                         testSuccessful: false,
                         showSnackbar: true,
-                        errorMessage: `Backend error (${err})`,
+                        errorMessage: `Backend error - please restart the gateway (${err}).`,
                     });
                     setLockedConsistentState(false);
                 });

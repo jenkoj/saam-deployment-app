@@ -42,7 +42,8 @@ class ProcedureLabeling extends React.PureComponent {
             labels: [],
             currentLabels: [],
             confirmationDialogOpen: false,
-            customLabel: {}
+            customLabel: {},
+            backendError: false,
         };
 
         this.timer = null;
@@ -50,14 +51,23 @@ class ProcedureLabeling extends React.PureComponent {
 
     callDataRecordingApi = async (api) => {
         const response = await fetch(api);
-        const body = await response.json();
-        if (response.status !== 200) throw Error(body.message);
+        //const body = await response.json();
         
-        return body;
+        return await response;
     };
 
     componentDidMount = () => {
-        this.callDataRecordingApi("/labeling/start");
+        this.callDataRecordingApi("/labeling/start")
+            .then((res) => {
+                if (res.status !== 200) {
+                    this.setState({ backendError: true });
+                    this.props.setLockedConsistentState(true);
+                }
+            })
+            .catch((err) => {
+                this.setState({ backendError: true });
+                this.props.setLockedConsistentState(true);
+            });
     }
 
     componentWillUnmount = () => {
@@ -238,7 +248,7 @@ class ProcedureLabeling extends React.PureComponent {
     report = async () => {
         const testData = {
             locationId: this.props.locationId.value || "",
-            phase: this.props.phase,
+            phase: this.props.phase || "",
             labels: this.state.labels.map((x) => { return {time: x.time.getTime(), label: x.label }; })
         };
         const response = await fetch("/report/labels", {
@@ -258,8 +268,20 @@ class ProcedureLabeling extends React.PureComponent {
         });
         this.callDataRecordingApi("/labeling/stop");
         this.timer = setTimeout(() => {
-            this.report();
-            this.props.handleProcedureFinish(true);
+            this.report()
+                .then((res) => {
+                    if (res.status !== 200) {
+                        this.setState({ backendError: true });
+                        this.props.setLockedConsistentState(true);
+                    }
+                    else {
+                        this.props.handleProcedureFinish(true);
+                    }
+                })
+                .catch((err) => {
+                    this.setState({ backendError: true });
+                    this.props.setLockedConsistentState(true);
+                });
         }, 4000);
     }
 
@@ -277,9 +299,14 @@ class ProcedureLabeling extends React.PureComponent {
             currentLabels,
             confirmationDialogOpen,
             customLabel,
-            sendingDataLock
+            sendingDataLock,
+            backendError
         } = this.state;
         const timeoutInProgress = timeoutSecondsLeft > 0;
+
+        if (backendError) {
+            return "Couldn't contact the server, please restart the gateway.";
+        }
 
         if (sendingDataLock) {
             return "Uploading labels ...";
