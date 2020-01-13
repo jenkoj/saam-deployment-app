@@ -21,6 +21,10 @@ import ConfirmationDialog from '../generics/ConfirmationDialog';
 import FeedbackSnackbar from '../generics/FeedbackSnackbar';
 import InputSelect from '../generics/InputSelect';
 
+import log from 'loglevel';
+
+log.enableAll();
+
 
 const appliances = require('./appliances.json').filter((app) => {
     return app.hasOwnProperty("title") && app.hasOwnProperty("labelingSteps") && app.labelingSteps.length > 0;
@@ -57,22 +61,29 @@ class ProcedureLabeling extends React.PureComponent {
     };
 
     componentDidMount = () => {
+        log.info("Mounting labeling component");
         this.callDataRecordingApi("/labeling/start")
             .then((res) => {
                 if (res.status !== 200) {
                     this.setState({ backendError: true });
                     this.props.setLockedConsistentState(true);
+                    log.error("Couldnt start data recording");
+                }
+                else {
+                    log.info("Started data recording");
                 }
             })
             .catch((err) => {
                 this.setState({ backendError: true });
                 this.props.setLockedConsistentState(true);
+                log.error("Couldnt start data recording");
             });
     }
 
     componentWillUnmount = () => {
-        this.callDataRecordingApi("/labeling/stop");
+        log.info("Unmounting labeling component");
         clearInterval(this.timer);
+        this.callDataRecordingApi("/labeling/stop");
     }
 
     addZ = (n) => {
@@ -90,6 +101,7 @@ class ProcedureLabeling extends React.PureComponent {
     }
 
     beginLabeling = () => {
+        log.info("Begin labeling", this.state.currentApplianceId);
         this.setState({
             labelingPhase: "labeling",
             currentStepNum: 0,
@@ -98,6 +110,7 @@ class ProcedureLabeling extends React.PureComponent {
     }
 
     handleCancelLabeling = () => {
+        log.info("Cancel labeling");
         clearInterval(this.timer);
         this.props.setLockedConsistentState(false);
 
@@ -112,6 +125,7 @@ class ProcedureLabeling extends React.PureComponent {
     }
 
     saveLabels = () => {
+        log.info("Saving labels", JSON.stringify(this.state.currentLabels));
         this.setState((state) => {
             let newLabels = [...state.labels];
             newLabels.push(...state.currentLabels);
@@ -125,6 +139,7 @@ class ProcedureLabeling extends React.PureComponent {
     }
 
     deleteLabel = (i) => {
+        log.info("Deleting label", JSON.stringify(this.state.labels[i]));
         this.setState((state) => {
             let newLabels = [...state.labels];
             newLabels.splice(i, 1);
@@ -177,7 +192,6 @@ class ProcedureLabeling extends React.PureComponent {
                     time: new Date(),
                     label: appliances[currentApplianceId]["labelingSteps"][currentStepNum]["identifier"],
                 });
-                
                 const timeoutSeconds = appliances[currentApplianceId]["labelingSteps"][currentStepNum]["timeoutOnFinish"] || 0;
 
                 this.timer = setInterval(this.timeoutOnFinish, 1000);
@@ -217,6 +231,7 @@ class ProcedureLabeling extends React.PureComponent {
     }
 
     submitLabels = () => {
+        log.info("Submit dialog open");
         this.setState({
             confirmationDialogOpen: true,
         });
@@ -231,6 +246,7 @@ class ProcedureLabeling extends React.PureComponent {
     }
 
     createCustomLabel = (e) => {
+        log.info("Creating a custom label", (this.state.customLabel && this.state.customLabel.label) || "");
         e.preventDefault();
         this.setState((state) => {
             let newLabels = [...state.labels];
@@ -262,23 +278,38 @@ class ProcedureLabeling extends React.PureComponent {
     };
 
     sendLabelsToDb = () => {
+        log.info("Sending labels to DB");
         this.props.setLockedConsistentState(true);
         this.setState({
             sendingDataLock: true
         });
-        this.callDataRecordingApi("/labeling/stop");
+        this.callDataRecordingApi("/labeling/stop")
+            .then((res) => {
+                if (res.status !== 200) {
+                    log.error("Couldnt stop data recording");
+                }
+                else {
+                    log.info("Stopped data recording");
+                }
+            })
+            .catch((err) => {
+                log.error("Couldnt stop data recording");
+            });;
         this.timer = setTimeout(() => {
             this.report()
                 .then((res) => {
                     if (res.status !== 200) {
+                        log.error("Couldnt save labels");
                         this.setState({ backendError: true });
                         this.props.setLockedConsistentState(true);
                     }
                     else {
+                        log.info("Saved labels");
                         this.props.handleProcedureFinish(true);
                     }
                 })
                 .catch((err) => {
+                    log.error(err);
                     this.setState({ backendError: true });
                     this.props.setLockedConsistentState(true);
                 });

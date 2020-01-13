@@ -7,6 +7,7 @@ import MaintenancePhase from './MaintenancePhase'
 import InstallationPhase from './InstallationPhase'
 
 import './App.css';
+import ErrorBoundary from './ErrorBoundary';
 
 
 class App extends React.Component {
@@ -49,21 +50,22 @@ class App extends React.Component {
                     <Typography variant="h5"><b>SAAM</b> | Installation and maintenance application</Typography>
                     {subtitle && <div style={{ fontSize: 'small', fontWeight: 300 }}>{subtitle}</div>}
                 </AppBar>
-                
-                <div className="App">
-                {{
-                    menu: <MainMenu
-                        locationId={locationId}
-                        country={country}
-                        locationIdLocked={locationIdLocked}
-                        handleLocationIdLockChange={this.handleLocationIdLockChange}
-                        handleInstallationStart={(country, locationId) => this.handleChangePhase("installation", country, locationId)}
-                        handleMaintenanceStart={(country, locationId) => this.handleChangePhase("maintenance", country, locationId)}
-                    />,
-                    installation: <InstallationPhase handleBackToMenu={() => this.handleChangePhase("menu")} locationId={locationId} country={country} phase={phase} />,
-                    maintenance: <MaintenancePhase handleBackToMenu={() => this.handleChangePhase("menu")} locationId={locationId} country={country} phase={phase} />,
-                }[phase]}
-                </div>
+                <ErrorBoundary>
+                    <div className="App">
+                    {{
+                        menu: <MainMenu
+                            locationId={locationId}
+                            country={country}
+                            locationIdLocked={locationIdLocked}
+                            handleLocationIdLockChange={this.handleLocationIdLockChange}
+                            handleInstallationStart={(country, locationId) => this.handleChangePhase("installation", country, locationId)}
+                            handleMaintenanceStart={(country, locationId) => this.handleChangePhase("maintenance", country, locationId)}
+                        />,
+                        installation: <InstallationPhase handleBackToMenu={() => this.handleChangePhase("menu")} locationId={locationId} country={country} phase={phase} />,
+                        maintenance: <MaintenancePhase handleBackToMenu={() => this.handleChangePhase("menu")} locationId={locationId} country={country} phase={phase} />,
+                    }[phase]}
+                    </div>
+                </ErrorBoundary>
             </React.Fragment>
         );
     }

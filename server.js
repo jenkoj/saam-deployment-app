@@ -237,5 +237,10 @@ app.post('/init/locationid', (req, res) => {
   res.send();
 });
 
+app.post('/logger', (req, res) => {
+  log.info("FE:", JSON.stringify(req.body));
+  res.send();
+});
+
 
 app.listen(port, () => log.info(`Listening on port ${port}`));
