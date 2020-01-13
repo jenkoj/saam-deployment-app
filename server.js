@@ -14,11 +14,17 @@ const pool = new Pool(require("./pgconfig"));
 const app = express();
 const port = process.env.PORT || (process.env.NODE_ENV === "production" ? 80 : 5000);
 
+const log = require('simple-node-logger').createSimpleLogger('saam.log');
+
+process.on('error', (msg) => {
+    log.error('Error event caught: ', JSON.stringify(msg));
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 if(process.env.NODE_ENV === "production") {
-  console.log("Running the production build.");
+  log.info("Running the production build.");
   app.use(express.static(path.join(__dirname, 'frontend/build')));
   app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
@@ -118,6 +124,8 @@ app.get('/test/voice', (req, res) => {
 });
 
 app.post('/report/test', (req, res) => {
+  log.info("Reporting test.", req.body);
+
   const queryString = `INSERT INTO tests(
     locationid, phase, timestamp, testname, status, comment
   ) VALUES(
@@ -131,15 +139,15 @@ app.post('/report/test', (req, res) => {
 
   pool.query(queryString, (err, result) => {
     if (err !== undefined) {
-      console.log("Postgres INSERT error:", err);
-      console.log("Postgres error position:", err.position);
+      log.error("Postgres INSERT error:", err);
+      log.error("Postgres error position:", err.position);
     }
 
     if (result !== undefined) {
       if (result.rowCount > 0) {
-        console.log("# of records inserted:", result.rowCount);
+        log.info("# of records inserted:", result.rowCount);
       } else {
-        console.log("No records were inserted.");
+        log.info("No records were inserted.");
       }
     }
 
@@ -148,26 +156,30 @@ app.post('/report/test', (req, res) => {
 });
 
 app.get('/labeling/start', (req, res) => {
-  console.log("Started recording raw pmc data.");
+  log.info("Started recording raw pmc data.");
   const pythonProcess = spawn('python3',["scripts/start_serial_read.py"]);
   res.send();
 });
 
 app.get('/labeling/stop', (req, res) => {
-  console.log("Stopped recording raw pmc data.");
+  log.info("Stopped recording raw pmc data.");
   const pythonProcess = spawn('python3',["scripts/stop_serial_read.py"]);
   res.send();
 });
 
 app.post('/report/labels', (req, res) => {
+  log.info("Recording labels", req.body);
+
   let measurements = "";
   try {
     measurements = fs.readFileSync("data.csv", { encoding: 'utf8' });
+    log.info("Read the measurements file");
   }
-  catch {
-
+  catch(ex) {
+    log.error(ex);
   }
 
+  log.info("Constructing query string.");
   const queryString = `INSERT INTO labels(
     locationid, phase, labels, measurements
   ) VALUES(
@@ -177,27 +189,31 @@ app.post('/report/labels', (req, res) => {
   '${measurements}'
   )`;
 
+  log.info("Constructing output.");
   const output = `${req.body.locationId}\t${req.body.phase}\t${JSON.stringify(req.body.labels)}\n\n${measurements}`;
 
+  log.info("Saving to a file.");
   fs.writeFile(`./data/${(new Date()).getTime()}.csv`, output, function(err) {
     if(err) {
-        return console.log(err);
+        log.error(err);
+        return;
     }
 
-    console.log("Labels and raw pmc data saved to file!");
+    log.info("Labels and raw pmc data saved to file!");
   }); 
 
+  log.info("Saving to DB.");
   pool.query(queryString, (err, result) => {
     if (err !== undefined) {
-      console.log("Postgres INSERT error:", err);
-      console.log("Postgres error position:", err.position);
+      log.error("Postgres INSERT error:", err);
+      log.error("Postgres error position:", err.position);
     }
 
     if (result !== undefined) {
       if (result.rowCount > 0) {
-        console.log("# of records inserted:", result.rowCount);
+        log.info("# of records inserted:", result.rowCount);
       } else {
-        console.log("No records were inserted.");
+        log.info("No records were inserted.");
       }
     }
 
@@ -206,19 +222,20 @@ app.post('/report/labels', (req, res) => {
 });
 
 app.post('/init/locationid', (req, res) => {
+  log.info("Updating locationid", req.body);
   const output = req.body.locationId + "\r\n";
   const path = "/etc/lgtc/loc-id";
 
   fs.writeFile(path, output, function(err) {
     if(err) {
-        return console.log(err);
+        return log.error(err);
     }
 
-    console.log("Location ID file updated, path: " + path);
+    log.info("Location ID file updated, path: " + path + ", " + output);
   }); 
 
   res.send();
 });
 
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, () => log.info(`Listening on port ${port}`));
